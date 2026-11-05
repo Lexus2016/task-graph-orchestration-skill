@@ -16,7 +16,7 @@
 - **不再盲目重试。** 连续两次相同的失败会触发 **SSoT**：停下来，找出所有尝试共同的错误假设，换一个原因去验证，或者上报。
 - **交付前的第二次审视。** 在最终报告前，Agent 以“没写过这份结果的评审者”的视角重读一遍。
 - **提前完成，跳过已完成的部分。** 每一步之后 Agent 会检查整个计划：目标已达成就停止；工作已完成就直接标记为完成而不重做；计划有误就只重新规划出错的部分。
-- **看到过程，而不只是结果。** 长任务结束时附上任务图动画回放的链接：每次计划、重新规划、跳过、检查点和 SSoT，以及对方法执行情况的自动检查（[示例](https://htmlpreview.github.io/?https://github.com/Lexus2016/task-graph-orchestration-skill/blob/main/examples/replay-vendor-contracts.html)）。
+- **看到过程，而不只是结果。** 长任务结束时附上任务图动画回放的链接：每次计划、重新规划、跳过、检查点和 SSoT，以及对方法执行情况的自动检查。
 - **只在值得时才委派。** 先缩小范围再阅读；给子 Agent 最少的上下文（路径而非内容），并要求简短的结果。
 - **小任务保持简单。** 改个名字就只是改名字，没有计划，没有仪式。
 
@@ -91,7 +91,7 @@ curl -fsSL https://raw.githubusercontent.com/Lexus2016/task-graph-orchestration-
 - **小任务：** 强制加载时 −2…−8 个百分点；自动组中从未触发（0%），日常使用不受影响。
 - **Token ×1.7–1.9，账单 ×1.3–1.5：** 额外步骤主要重读已缓存的上下文（Claude 缓存读取占比 86–88% → 90–91%），新 Token 仅增长 ×1.2–1.4。DeepSeek 缓存较少，成本 ×1.5。
 
-详细方法与说明：[README.md](README.md#benchmark)、[`evals/benchmark/RESULTS.md`](evals/benchmark/RESULTS.md)。
+详细方法与说明：[README.md](README.md#benchmark)、。
 
 ## 自动更新
 

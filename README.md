@@ -121,7 +121,7 @@ Measured on 2026-11-05 with skill v1.1.0: Claude Code 2.1.318 (`claude -p`) for 
 
 **How the benchmark changed the skill.** The first v1.1.0 run lost up to 19 pp on real work. The transcripts showed why: agents ran the auto-update script mid-task and pasted SSoT lines and notes about the skill into their answers. Both moved out of the agent's path — updates now run outside tasks, and the deliverable is about the work only. One grader was also fixed: it penalised *adding* tests, which the prompt never forbade (editing or deleting existing tests still fails it).
 
-*Caveats:* small samples (2–5 runs per arm per task); the judge shares a model family with three of the four subjects; real-work tasks hit the ceiling. Per-task numbers with every token class: [`evals/benchmark/RESULTS.md`](evals/benchmark/RESULTS.md).
+*Caveats:* small samples (2–5 runs per arm per task); the judge shares a model family with three of the four subjects; real-work tasks hit the ceiling.
 
 ## Graph replay
 
@@ -133,8 +133,6 @@ When a run is long enough to plan as a graph (FULL mode, or when you ask), the a
 - **Criteria light up** as evidence arrives; delegated units show their worker; removed and skipped units stay visible as dashed boxes.
 - **Findings** — automatic checks of the method: DONE only after evidence, a checkpoint after every unit result, skips with a reason, a final SSoT, “complete” only when every required criterion has evidence, briefs and returns kept small.
 - With the run transcript (`trace_graph.py analyze --run …`) it also ties every event to the real tool call and splits tokens between the orchestrator and its subagents.
-
-Example: [four models on the same 10-contract review](https://htmlpreview.github.io/?https://github.com/Lexus2016/task-graph-orchestration-skill/blob/main/examples/replay-vendor-contracts.html) — Haiku, Sonnet, Opus and DeepSeek, all 10/10 correct, three of four traces clean.
 
 ## What the skill makes the agent do
 
@@ -199,27 +197,15 @@ The check compares `VERSION` with this repository, downloads the tagged release,
 ## Repository layout
 
 ```text
-skills/task-graph-orchestration/   the skill: SKILL.md, references/, scripts/ (update.sh, trace_graph.py), assets/trace-viewer.html, VERSION
-examples/                          replay pages of real traced runs
-evals/                             7 A/B test cases: prompt, expected outcome, graders, input files
-evals/harness/                     runners for Claude Code and OpenCode, blind judge, summarizer
-evals/benchmark/                   published results: RESULTS.md (per task), summary.json
+skills/task-graph-orchestration/   the skill: SKILL.md, references/, scripts/ (update.sh, tgo.py, trace_graph.py), assets/trace-viewer.html, VERSION
+tests/                             unit tests for the helper scripts
 .claude-plugin/ · hooks/           Claude Code plugin + marketplace manifests · SessionStart update hook
 install.sh · PROMPT.md             one-line install · paste-into-agent install
 ```
 
-## Reproduce the benchmark
+## About the benchmark
 
-```bash
-git clone https://github.com/Lexus2016/task-graph-orchestration-skill && cd task-graph-orchestration-skill
-MODEL=claude-haiku-5-5 bash evals/harness/ab-run.sh 5 6                       # Claude Code: 7 tasks × 3 arms × 5 runs → .bench/ab/
-MODEL=ollama-cloud/deepseek-v4.1-flash:1017 OUT=.bench/ab-ds \
-  bash evals/harness/ab-run-opencode.sh 3 4                                    # OpenCode, any model it can reach
-AB=.bench/ab python3 -I evals/harness/ab-judge.py                             # blind judge → .bench/ab/results.json
-python3 -I evals/harness/summarize.py "Haiku 5.5=.bench/ab/results.json" "DeepSeek=.bench/ab-ds/results.json"
-```
-
-`claude plugin eval . --allow-tools Write Edit Bash --scaffold` runs the same cases through Claude Code's built-in runner (its Bash sandbox refuses to start on machines whose `~/.ssh` contains symlinks — the harness above has no such limit). Each case in `evals/` is plain Markdown + YAML, so you can also run it by hand in any agent.
+The test cases, runners and the blind judge are kept outside this repository; it ships only the skill and these READMEs. The **Benchmark** section above describes the method (tasks, arms, scoring, runs) and will be updated as the measurements are redone.
 
 ---
 

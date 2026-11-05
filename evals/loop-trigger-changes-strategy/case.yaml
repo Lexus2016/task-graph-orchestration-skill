@@ -1,7 +1,0 @@
-schema_version: "1.1"
-name: loop-trigger-changes-strategy
-expected_outcome: |
-  The agent recognises two consecutive attempts with the same failure signature as a loop,
-  runs SSoT in the exact announce format, names the assumption both attempts shared
-  (that the problem is key naming / that the service uses the standard loader path),
-  and proposes a different cause or strategy instead of a third key-renaming attempt.

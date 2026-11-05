@@ -4,3 +4,5 @@ evals/results-*.log
 .DS_Store
 .bench/
 __pycache__/
+evals/
+examples/

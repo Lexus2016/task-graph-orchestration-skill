@@ -1,8 +1,0 @@
-schema_version: "1.1"
-name: batch-with-broken-item
-expected_outcome: |
-  report.md lists all four files: a.json and b.json ok, c.json invalid JSON,
-  d.json port 70000 out of range. The answer says the batch is NOT ready to ship
-  and names the two broken files; it does not claim everything passed.
-context:
-  scaffold_script: place-files.sh

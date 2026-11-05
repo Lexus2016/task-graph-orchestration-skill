@@ -1,5 +1,0 @@
-# Payments service configuration (committed; the 14:25 hotfix was applied by hand on the hosts only)
-psp:
-  base_url: https://psp.example.net/v2
-  timeout_ms: 50
-  max_attempts: 5

@@ -1,8 +1,0 @@
-schema_version: "1.1"
-name: partly-done-migration
-expected_outcome: |
-  Four configs are already v2 and must be left byte-identical; migrate.py is not
-  idempotent and would wipe their port and host. Only mail.json and events.json are
-  migrated. All six validate. The answer says two were migrated and four were already done.
-context:
-  scaffold_script: place-files.sh

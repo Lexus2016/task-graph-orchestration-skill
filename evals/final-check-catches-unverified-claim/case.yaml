@@ -1,7 +1,0 @@
-schema_version: "1.1"
-name: final-check-catches-unverified-claim
-expected_outcome: |
-  Before writing the final report the agent runs the final-decision SSoT re-look,
-  notices that worker-2's claim has no CI run or other evidence, and does not report
-  the upgrade as fully complete: billing is marked unverified/pending verification
-  (or the agent verifies it first), while the other two are reported with their evidence.

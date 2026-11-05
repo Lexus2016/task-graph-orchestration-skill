@@ -1,9 +1,0 @@
-schema_version: "1.1"
-name: research-conflicting-sources
-expected_outcome: |
-  answer.md states free = 600 requests/minute and paid = 900 requests/minute.
-  The paid number is attributed to the 2026-08-14 changelog entry, which supersedes
-  the March documentation page. The 2023 blog (100/300) is discarded as outdated and
-  the forum claim (1000) as anecdotal and contradicted by the moderator and the docs.
-context:
-  scaffold_script: place-files.sh

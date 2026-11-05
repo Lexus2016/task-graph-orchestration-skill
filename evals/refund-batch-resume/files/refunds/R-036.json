@@ -1,9 +1,0 @@
-{
- "id": "R-036",
- "customer_email": "customer036@example.com",
- "order_id": "O-70252",
- "order_date": "2026-09-02",
- "request_date": "2026-09-29",
- "amount_eur": 187.2,
- "reason_text": "changed mind"
-}

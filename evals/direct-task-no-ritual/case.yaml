@@ -1,8 +1,0 @@
-schema_version: "1.1"
-name: direct-task-no-ritual
-expected_outcome: |
-  The agent treats this as a DIRECT task: renames the function in both files,
-  runs pytest, reports the result. No orchestration plan, no units, no state file.
-  The skill itself adds no SSoT here; a standing user rule may still add one.
-context:
-  scaffold_script: place-files.sh

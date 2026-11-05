@@ -5,9 +5,8 @@
   python3 trace_graph.py analyze --run NAME TRACE TRANSCRIPT [--run ...] [--bundle out.json] [--report out.md]
       Checks one or more runs and prints a Markdown report.
 
-The transcript is optional: `claude -p --output-format stream-json --verbose` output (OpenCode runs converted with
-evals/harness/opencode_to_stream.py). With it, events are tied to the real tool calls and token use is split
-between the orchestrator and its subagents. Standard library only."""
+The transcript is optional: `claude -p --output-format stream-json --verbose` output. With it, events are tied to
+the real tool calls and token use is split between the orchestrator and its subagents. Standard library only."""
 import argparse, json, os, re, sys
 
 TERMINAL = {"DONE", "FAILED", "SKIPPED"}
