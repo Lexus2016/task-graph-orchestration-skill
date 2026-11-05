@@ -1,42 +1,91 @@
-# Benchmark results (per case)
+# Benchmark results (per task)
 
-Quality = blind judge score 1–10. Outcome = share of non-SSoT graders passed. Means over runs.
+Quality = blind judge score as % of ideal (score × 10). Outcome = share of task criteria passed (SSoT-format criteria excluded). Means over runs.
+Tokens are split by billing class: uncached input, cache write, cache read, output.
 
-| Model | Case | Arm | n | Quality | Outcome | All graders | Time s | Turns | Tool calls | Tokens | Cost $ |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| Haiku 5.5 | batch-with-broken-item | without | 5 | 9.00 | 100% | 100% | 20.2 | 4.0 | 3.0 | 82988 | 0.0028 |
-| Haiku 5.5 | batch-with-broken-item | forced | 5 | 8.80 | 100% | 100% | 21.9 | 8.8 | 6.8 | 132759 | 0.0042 |
-| Haiku 5.5 | batch-with-broken-item | auto | 5 | 9.00 | 100% | 100% | 16.6 | 4.6 | 3.6 | 84519 | 0.0021 |
-| Haiku 5.5 | direct-task-no-ritual | without | 5 | 9.00 | 100% | 100% | 19.5 | 7.6 | 6.6 | 98495 | 0.0029 |
-| Haiku 5.5 | direct-task-no-ritual | forced | 5 | 8.60 | 100% | 100% | 22.1 | 9.6 | 7.6 | 151182 | 0.0039 |
-| Haiku 5.5 | direct-task-no-ritual | auto | 5 | 9.00 | 100% | 100% | 16.5 | 7.4 | 6.4 | 95741 | 0.0021 |
-| Haiku 5.5 | final-check-catches-unverified-claim | without | 5 | 6.40 | 100% | 67% | 9.5 | 1.6 | 0.6 | 32332 | 0.0016 |
-| Haiku 5.5 | final-check-catches-unverified-claim | forced | 5 | 7.40 | 100% | 87% | 29.3 | 6.2 | 4.2 | 112846 | 0.0040 |
-| Haiku 5.5 | final-check-catches-unverified-claim | auto | 5 | 6.60 | 100% | 80% | 30.6 | 6.2 | 4.2 | 114493 | 0.0041 |
-| Haiku 5.5 | loop-trigger-changes-strategy | without | 5 | 5.40 | 80% | 53% | 36.4 | 4.4 | 3.4 | 68035 | 0.0032 |
-| Haiku 5.5 | loop-trigger-changes-strategy | forced | 5 | 5.60 | 100% | 73% | 107.3 | 8.6 | 6.6 | 186944 | 0.0057 |
-| Haiku 5.5 | loop-trigger-changes-strategy | auto | 5 | 5.20 | 100% | 67% | 160.8 | 7.2 | 6.2 | 136158 | 0.0047 |
-| Sonnet 5.5 | batch-with-broken-item | without | 2 | 8.50 | 100% | 100% | 14.9 | 3.0 | 2.0 | 57400 | 0.0873 |
-| Sonnet 5.5 | batch-with-broken-item | forced | 2 | 8.50 | 100% | 100% | 20.1 | 5.5 | 3.5 | 93395 | 0.0457 |
-| Sonnet 5.5 | batch-with-broken-item | auto | 2 | 8.50 | 100% | 100% | 12.8 | 3.0 | 2.0 | 58834 | 0.0169 |
-| Sonnet 5.5 | direct-task-no-ritual | without | 2 | 8.00 | 100% | 100% | 12.6 | 3.0 | 2.0 | 56126 | 0.0265 |
-| Sonnet 5.5 | direct-task-no-ritual | forced | 2 | 8.50 | 100% | 100% | 18.1 | 7.0 | 5.0 | 104662 | 0.0408 |
-| Sonnet 5.5 | direct-task-no-ritual | auto | 2 | 8.50 | 100% | 100% | 11.4 | 3.0 | 2.0 | 57042 | 0.0092 |
-| Sonnet 5.5 | final-check-catches-unverified-claim | without | 2 | 6.00 | 100% | 67% | 6.0 | 1.0 | 0.0 | 19113 | 0.0245 |
-| Sonnet 5.5 | final-check-catches-unverified-claim | forced | 2 | 8.00 | 100% | 100% | 28.6 | 4.0 | 2.0 | 67688 | 0.0358 |
-| Sonnet 5.5 | final-check-catches-unverified-claim | auto | 2 | 6.50 | 100% | 67% | 5.9 | 1.0 | 0.0 | 19440 | 0.0075 |
-| Sonnet 5.5 | loop-trigger-changes-strategy | without | 2 | 5.50 | 100% | 67% | 16.6 | 3.0 | 2.0 | 39128 | 0.0383 |
-| Sonnet 5.5 | loop-trigger-changes-strategy | forced | 2 | 7.00 | 100% | 83% | 18.9 | 3.5 | 1.5 | 56148 | 0.0398 |
-| Sonnet 5.5 | loop-trigger-changes-strategy | auto | 2 | 6.00 | 100% | 67% | 20.5 | 5.0 | 3.0 | 69061 | 0.0471 |
-| Opus 5.5 | batch-with-broken-item | without | 2 | 9.00 | 100% | 100% | 14.2 | 3.5 | 2.5 | 68750 | 0.1903 |
-| Opus 5.5 | batch-with-broken-item | forced | 2 | 9.00 | 100% | 100% | 17.2 | 5.5 | 3.5 | 106498 | 0.0991 |
-| Opus 5.5 | batch-with-broken-item | auto | 2 | 9.00 | 100% | 100% | 13.2 | 3.5 | 2.5 | 69246 | 0.0399 |
-| Opus 5.5 | direct-task-no-ritual | without | 2 | 9.00 | 100% | 100% | 8.4 | 3.0 | 2.0 | 56772 | 0.0561 |
-| Opus 5.5 | direct-task-no-ritual | forced | 2 | 9.00 | 100% | 100% | 10.3 | 5.0 | 3.0 | 91878 | 0.0742 |
-| Opus 5.5 | direct-task-no-ritual | auto | 2 | 8.50 | 75% | 83% | 7.5 | 3.0 | 2.0 | 57580 | 0.0217 |
-| Opus 5.5 | final-check-catches-unverified-claim | without | 2 | 6.00 | 100% | 67% | 5.8 | 1.0 | 0.0 | 19186 | 0.0464 |
-| Opus 5.5 | final-check-catches-unverified-claim | forced | 2 | 7.00 | 100% | 100% | 17.9 | 4.0 | 2.0 | 68649 | 0.0834 |
-| Opus 5.5 | final-check-catches-unverified-claim | auto | 2 | 8.00 | 100% | 100% | 15.3 | 3.5 | 1.5 | 56432 | 0.0766 |
-| Opus 5.5 | loop-trigger-changes-strategy | without | 2 | 5.50 | 75% | 50% | 18.1 | 2.0 | 1.0 | 38832 | 0.0680 |
-| Opus 5.5 | loop-trigger-changes-strategy | forced | 2 | 6.50 | 100% | 100% | 22.6 | 4.0 | 2.0 | 68624 | 0.0894 |
-| Opus 5.5 | loop-trigger-changes-strategy | auto | 2 | 8.00 | 100% | 100% | 21.4 | 4.0 | 2.0 | 69166 | 0.0907 |
+| Model | Task | Arm | n | Quality | Outcome | Time s | Turns | Tool calls | Uncached in | Cache write | Cache read | Output | Cost $ | Skill used |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Haiku 5.5 | batch-with-broken-item | without | 5 | 90% | 100% | 20.2 | 4.0 | 3.0 | 8 | 6139 | 75171 | 1670 | 0.0028 | 0% |
+| Haiku 5.5 | batch-with-broken-item | forced | 5 | 90% | 100% | 13.9 | 7.6 | 5.6 | 11 | 7374 | 101356 | 1964 | 0.0035 | 100% |
+| Haiku 5.5 | batch-with-broken-item | auto | 5 | 90% | 100% | 12.5 | 5.2 | 4.2 | 8 | 1963 | 80401 | 1664 | 0.0020 | 0% |
+| Haiku 5.5 | direct-task-no-ritual | without | 5 | 88% | 100% | 19.5 | 7.6 | 6.6 | 10 | 6180 | 90824 | 1481 | 0.0029 | 0% |
+| Haiku 5.5 | direct-task-no-ritual | forced | 5 | 84% | 100% | 14.0 | 9.2 | 7.2 | 13 | 7521 | 127005 | 1943 | 0.0037 | 100% |
+| Haiku 5.5 | direct-task-no-ritual | auto | 5 | 90% | 100% | 11.6 | 7.2 | 6.2 | 9 | 1876 | 92077 | 1454 | 0.0020 | 0% |
+| Haiku 5.5 | final-check-catches-unverified-claim | without | 5 | 64% | 100% | 9.5 | 1.6 | 0.6 | 3 | 4552 | 26845 | 932 | 0.0016 | 0% |
+| Haiku 5.5 | final-check-catches-unverified-claim | forced | 5 | 76% | 100% | 45.0 | 7.0 | 5.0 | 13 | 9669 | 137151 | 2875 | 0.0047 | 100% |
+| Haiku 5.5 | final-check-catches-unverified-claim | auto | 5 | 70% | 100% | 35.0 | 3.0 | 2.0 | 4 | 2565 | 43697 | 1507 | 0.0017 | 0% |
+| Haiku 5.5 | loop-trigger-changes-strategy | without | 5 | 56% | 100% | 36.4 | 4.4 | 3.4 | 6 | 7271 | 58524 | 2234 | 0.0032 | 0% |
+| Haiku 5.5 | loop-trigger-changes-strategy | forced | 5 | 56% | 100% | 157.8 | 8.4 | 6.4 | 15 | 11622 | 163699 | 3430 | 0.0057 | 100% |
+| Haiku 5.5 | loop-trigger-changes-strategy | auto | 5 | 54% | 80% | 136.6 | 6.4 | 5.4 | 10 | 6830 | 110016 | 3297 | 0.0041 | 0% |
+| Haiku 5.5 | partly-done-migration | without | 5 | 86% | 100% | 12.5 | 4.0 | 3.0 | 8 | 6652 | 75718 | 1328 | 0.0028 | 0% |
+| Haiku 5.5 | partly-done-migration | forced | 5 | 90% | 100% | 15.2 | 6.0 | 4.0 | 11 | 7917 | 101851 | 1650 | 0.0034 | 100% |
+| Haiku 5.5 | partly-done-migration | auto | 5 | 90% | 100% | 15.0 | 5.0 | 4.0 | 9 | 2955 | 94851 | 1702 | 0.0024 | 0% |
+| Haiku 5.5 | programming-multifile-fix | without | 5 | 90% | 100% | 18.4 | 7.4 | 6.4 | 9 | 8595 | 90289 | 3149 | 0.0042 | 0% |
+| Haiku 5.5 | programming-multifile-fix | forced | 5 | 88% | 100% | 21.4 | 11.4 | 9.4 | 13 | 10272 | 131755 | 3792 | 0.0053 | 100% |
+| Haiku 5.5 | programming-multifile-fix | auto | 5 | 90% | 100% | 18.5 | 7.6 | 6.6 | 9 | 4316 | 95704 | 3179 | 0.0034 | 0% |
+| Haiku 5.5 | research-conflicting-sources | without | 5 | 90% | 100% | 15.0 | 5.4 | 4.4 | 7 | 7714 | 67378 | 2534 | 0.0035 | 0% |
+| Haiku 5.5 | research-conflicting-sources | forced | 5 | 90% | 100% | 17.1 | 8.4 | 6.4 | 10 | 9007 | 91877 | 2916 | 0.0042 | 100% |
+| Haiku 5.5 | research-conflicting-sources | auto | 5 | 90% | 100% | 15.6 | 4.4 | 3.4 | 7 | 3359 | 72561 | 2480 | 0.0026 | 0% |
+| Sonnet 5.5 | batch-with-broken-item | without | 2 | 90% | 100% | 14.9 | 3.0 | 2.0 | 6 | 19322 | 37447 | 626 | 0.0873 | 0% |
+| Sonnet 5.5 | batch-with-broken-item | forced | 2 | 90% | 100% | 16.6 | 5.0 | 3.0 | 10 | 6282 | 86192 | 934 | 0.0431 | 100% |
+| Sonnet 5.5 | batch-with-broken-item | auto | 2 | 90% | 100% | 13.6 | 3.0 | 2.0 | 6 | 1023 | 57047 | 668 | 0.0165 | 0% |
+| Sonnet 5.5 | direct-task-no-ritual | without | 2 | 90% | 100% | 12.6 | 3.0 | 2.0 | 6 | 4728 | 51144 | 248 | 0.0265 | 0% |
+| Sonnet 5.5 | direct-task-no-ritual | forced | 2 | 85% | 100% | 14.0 | 7.5 | 5.5 | 11 | 6217 | 98850 | 786 | 0.0426 | 100% |
+| Sonnet 5.5 | direct-task-no-ritual | auto | 2 | 80% | 100% | 9.6 | 3.0 | 2.0 | 6 | 281 | 56589 | 269 | 0.0095 | 0% |
+| Sonnet 5.5 | final-check-catches-unverified-claim | without | 2 | 70% | 100% | 6.0 | 1.0 | 0.0 | 2 | 4501 | 14102 | 508 | 0.0245 | 0% |
+| Sonnet 5.5 | final-check-catches-unverified-claim | forced | 2 | 80% | 100% | 12.8 | 4.0 | 2.0 | 8 | 5374 | 61954 | 885 | 0.0366 | 100% |
+| Sonnet 5.5 | final-check-catches-unverified-claim | auto | 2 | 70% | 100% | 5.0 | 1.0 | 0.0 | 2 | 0 | 18881 | 513 | 0.0070 | 0% |
+| Sonnet 5.5 | loop-trigger-changes-strategy | without | 2 | 55% | 100% | 16.6 | 3.0 | 2.0 | 4 | 5017 | 32606 | 1502 | 0.0384 | 0% |
+| Sonnet 5.5 | loop-trigger-changes-strategy | forced | 2 | 60% | 100% | 17.4 | 4.5 | 2.5 | 8 | 5866 | 61756 | 1474 | 0.0444 | 100% |
+| Sonnet 5.5 | loop-trigger-changes-strategy | auto | 2 | 50% | 50% | 19.4 | 5.0 | 3.0 | 8 | 6020 | 61839 | 1514 | 0.0454 | 100% |
+| Sonnet 5.5 | partly-done-migration | without | 2 | 85% | 100% | 16.2 | 3.0 | 2.0 | 6 | 5633 | 51946 | 588 | 0.0336 | 0% |
+| Sonnet 5.5 | partly-done-migration | forced | 2 | 90% | 100% | 13.1 | 6.0 | 4.0 | 10 | 6936 | 87955 | 716 | 0.0437 | 100% |
+| Sonnet 5.5 | partly-done-migration | auto | 2 | 85% | 100% | 16.4 | 4.0 | 3.0 | 8 | 1954 | 77942 | 882 | 0.0244 | 0% |
+| Sonnet 5.5 | programming-multifile-fix | without | 2 | 85% | 100% | 23.1 | 3.5 | 2.5 | 7 | 6008 | 61961 | 1185 | 0.0421 | 0% |
+| Sonnet 5.5 | programming-multifile-fix | forced | 2 | 90% | 100% | 23.1 | 9.0 | 7.0 | 12 | 7448 | 113090 | 1776 | 0.0589 | 100% |
+| Sonnet 5.5 | programming-multifile-fix | auto | 2 | 70% | 100% | 27.5 | 4.0 | 3.0 | 8 | 1437 | 77475 | 1276 | 0.0263 | 0% |
+| Sonnet 5.5 | research-conflicting-sources | without | 2 | 90% | 100% | 30.0 | 3.5 | 2.5 | 7 | 6956 | 62006 | 1674 | 0.0508 | 0% |
+| Sonnet 5.5 | research-conflicting-sources | forced | 2 | 90% | 100% | 22.9 | 10.0 | 8.0 | 10 | 8026 | 87700 | 2431 | 0.0652 | 100% |
+| Sonnet 5.5 | research-conflicting-sources | auto | 2 | 90% | 100% | 20.4 | 3.5 | 2.5 | 7 | 2339 | 67476 | 1476 | 0.0309 | 0% |
+| Opus 5.5 | batch-with-broken-item | without | 2 | 90% | 100% | 14.2 | 3.5 | 2.5 | 7 | 20004 | 47706 | 1032 | 0.1902 | 0% |
+| Opus 5.5 | batch-with-broken-item | forced | 2 | 85% | 100% | 19.9 | 6.0 | 4.0 | 12 | 6794 | 111852 | 1448 | 0.1057 | 100% |
+| Opus 5.5 | batch-with-broken-item | auto | 2 | 90% | 100% | 16.2 | 4.0 | 3.0 | 8 | 1222 | 77161 | 1007 | 0.0454 | 0% |
+| Opus 5.5 | direct-task-no-ritual | without | 2 | 90% | 100% | 8.4 | 3.0 | 2.0 | 6 | 4665 | 51679 | 422 | 0.0561 | 0% |
+| Opus 5.5 | direct-task-no-ritual | forced | 2 | 80% | 100% | 11.3 | 5.0 | 3.0 | 10 | 5814 | 86110 | 488 | 0.0735 | 100% |
+| Opus 5.5 | direct-task-no-ritual | auto | 2 | 90% | 100% | 10.6 | 3.0 | 2.0 | 6 | 384 | 56824 | 410 | 0.0227 | 0% |
+| Opus 5.5 | final-check-catches-unverified-claim | without | 2 | 65% | 100% | 5.8 | 1.0 | 0.0 | 2 | 4154 | 14515 | 514 | 0.0464 | 0% |
+| Opus 5.5 | final-check-catches-unverified-claim | forced | 2 | 75% | 100% | 15.1 | 4.0 | 2.0 | 8 | 5458 | 62102 | 1024 | 0.0766 | 100% |
+| Opus 5.5 | final-check-catches-unverified-claim | auto | 2 | 70% | 100% | 10.4 | 2.0 | 0.5 | 4 | 2702 | 28424 | 900 | 0.0453 | 50% |
+| Opus 5.5 | loop-trigger-changes-strategy | without | 2 | 60% | 100% | 18.1 | 2.0 | 1.0 | 4 | 4503 | 33054 | 1272 | 0.0681 | 0% |
+| Opus 5.5 | loop-trigger-changes-strategy | forced | 2 | 70% | 100% | 21.7 | 4.0 | 2.0 | 8 | 5546 | 61960 | 1594 | 0.0887 | 100% |
+| Opus 5.5 | loop-trigger-changes-strategy | auto | 2 | 60% | 100% | 23.6 | 4.0 | 2.0 | 8 | 5977 | 62092 | 1633 | 0.0929 | 100% |
+| Opus 5.5 | partly-done-migration | without | 2 | 90% | 100% | 12.3 | 3.0 | 2.0 | 6 | 6265 | 52635 | 782 | 0.0763 | 0% |
+| Opus 5.5 | partly-done-migration | forced | 2 | 85% | 100% | 17.3 | 5.0 | 3.0 | 10 | 7002 | 87292 | 1031 | 0.0941 | 100% |
+| Opus 5.5 | partly-done-migration | auto | 2 | 90% | 100% | 13.9 | 3.0 | 2.0 | 6 | 1886 | 57975 | 850 | 0.0437 | 0% |
+| Opus 5.5 | programming-multifile-fix | without | 2 | 85% | 100% | 23.9 | 3.5 | 2.5 | 6 | 6646 | 52464 | 1658 | 0.0968 | 0% |
+| Opus 5.5 | programming-multifile-fix | forced | 2 | 85% | 100% | 34.6 | 5.5 | 3.5 | 10 | 7542 | 87120 | 2135 | 0.1205 | 100% |
+| Opus 5.5 | programming-multifile-fix | auto | 2 | 80% | 100% | 29.7 | 4.0 | 3.0 | 6 | 2144 | 57694 | 1640 | 0.0615 | 0% |
+| Opus 5.5 | research-conflicting-sources | without | 2 | 90% | 100% | 22.0 | 3.0 | 2.0 | 6 | 6594 | 52285 | 1650 | 0.0962 | 0% |
+| Opus 5.5 | research-conflicting-sources | forced | 2 | 85% | 100% | 25.7 | 5.0 | 3.0 | 10 | 7640 | 86949 | 2004 | 0.1186 | 100% |
+| Opus 5.5 | research-conflicting-sources | auto | 2 | 85% | 100% | 21.0 | 3.0 | 2.0 | 6 | 1192 | 58526 | 1676 | 0.0548 | 0% |
+| DeepSeek V4.1 Flash (OpenCode) | batch-with-broken-item | without | 3 | 90% | 100% | 14.3 | 4.7 | 8.0 | 6266 | 0 | 21057 | 803 | 0.0015 | 0% |
+| DeepSeek V4.1 Flash (OpenCode) | batch-with-broken-item | forced | 3 | 83% | 100% | 17.7 | 6.7 | 7.3 | 10296 | 0 | 57387 | 1974 | 0.0029 | 100% |
+| DeepSeek V4.1 Flash (OpenCode) | batch-with-broken-item | auto | 3 | 87% | 100% | 8.7 | 4.0 | 3.3 | 10732 | 0 | 13384 | 731 | 0.0021 | 0% |
+| DeepSeek V4.1 Flash (OpenCode) | direct-task-no-ritual | without | 3 | 90% | 100% | 8.0 | 3.0 | 5.3 | 4453 | 0 | 12544 | 572 | 0.0010 | 0% |
+| DeepSeek V4.1 Flash (OpenCode) | direct-task-no-ritual | forced | 3 | 90% | 100% | 9.0 | 3.7 | 6.3 | 13268 | 0 | 18895 | 716 | 0.0025 | 100% |
+| DeepSeek V4.1 Flash (OpenCode) | direct-task-no-ritual | auto | 3 | 90% | 100% | 6.7 | 3.3 | 5.3 | 5738 | 0 | 13729 | 474 | 0.0012 | 0% |
+| DeepSeek V4.1 Flash (OpenCode) | final-check-catches-unverified-claim | without | 3 | 67% | 100% | 13.3 | 2.7 | 4.3 | 5160 | 0 | 11605 | 1534 | 0.0017 | 0% |
+| DeepSeek V4.1 Flash (OpenCode) | final-check-catches-unverified-claim | forced | 3 | 80% | 100% | 27.7 | 4.7 | 5.3 | 12877 | 0 | 32972 | 2950 | 0.0038 | 100% |
+| DeepSeek V4.1 Flash (OpenCode) | final-check-catches-unverified-claim | auto | 3 | 70% | 100% | 15.0 | 3.0 | 4.7 | 9748 | 0 | 17274 | 1368 | 0.0023 | 100% |
+| DeepSeek V4.1 Flash (OpenCode) | loop-trigger-changes-strategy | without | 3 | 57% | 83% | 19.7 | 2.0 | 2.0 | 4376 | 0 | 7339 | 1962 | 0.0019 | 0% |
+| DeepSeek V4.1 Flash (OpenCode) | loop-trigger-changes-strategy | forced | 3 | 70% | 100% | 24.7 | 2.0 | 2.3 | 9530 | 0 | 5757 | 1333 | 0.0022 | 100% |
+| DeepSeek V4.1 Flash (OpenCode) | loop-trigger-changes-strategy | auto | 3 | 60% | 100% | 20.3 | 1.7 | 1.3 | 7236 | 0 | 4869 | 1798 | 0.0022 | 100% |
+| DeepSeek V4.1 Flash (OpenCode) | partly-done-migration | without | 3 | 90% | 100% | 17.0 | 7.0 | 9.0 | 7001 | 0 | 46976 | 1772 | 0.0023 | 0% |
+| DeepSeek V4.1 Flash (OpenCode) | partly-done-migration | forced | 3 | 87% | 100% | 21.7 | 6.0 | 10.0 | 16588 | 0 | 44787 | 1679 | 0.0036 | 100% |
+| DeepSeek V4.1 Flash (OpenCode) | partly-done-migration | auto | 3 | 90% | 100% | 16.0 | 7.3 | 8.0 | 11827 | 0 | 36867 | 997 | 0.0025 | 0% |
+| DeepSeek V4.1 Flash (OpenCode) | programming-multifile-fix | without | 3 | 90% | 100% | 23.0 | 7.3 | 14.3 | 9565 | 0 | 42605 | 2486 | 0.0031 | 0% |
+| DeepSeek V4.1 Flash (OpenCode) | programming-multifile-fix | forced | 3 | 83% | 100% | 33.7 | 7.0 | 10.7 | 12624 | 0 | 60974 | 2558 | 0.0036 | 100% |
+| DeepSeek V4.1 Flash (OpenCode) | programming-multifile-fix | auto | 3 | 90% | 100% | 20.0 | 6.3 | 13.3 | 6207 | 0 | 41833 | 2676 | 0.0027 | 0% |
+| DeepSeek V4.1 Flash (OpenCode) | research-conflicting-sources | without | 3 | 90% | 100% | 9.3 | 3.0 | 5.7 | 7859 | 0 | 9614 | 1121 | 0.0019 | 0% |
+| DeepSeek V4.1 Flash (OpenCode) | research-conflicting-sources | forced | 3 | 87% | 100% | 20.3 | 6.0 | 9.3 | 12325 | 0 | 48171 | 1931 | 0.0032 | 100% |
+| DeepSeek V4.1 Flash (OpenCode) | research-conflicting-sources | auto | 3 | 87% | 100% | 9.7 | 3.0 | 7.3 | 6587 | 0 | 11843 | 1284 | 0.0018 | 0% |

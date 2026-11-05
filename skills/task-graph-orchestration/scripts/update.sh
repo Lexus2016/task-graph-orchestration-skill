@@ -5,7 +5,11 @@
 #   bash scripts/update.sh update    # check now and update if a newer release exists
 #   bash scripts/update.sh install   # copy this checkout into every detected agent skill root
 #   bash scripts/update.sh version   # print the installed version
+#   bash scripts/update.sh schedule  # daily background update (launchd on macOS, cron elsewhere)
+#   bash scripts/update.sh unschedule
 #
+# The agent never runs this during a task: updates come from the daily job, the Claude Code plugin's
+# SessionStart hook, or a manual run.
 # Always exits 0 in check/update mode so it never blocks an agent run.
 # Opt out of auto-update: TGO_AUTO_UPDATE=0.
 # Output (one line, machine-readable first word):
@@ -100,7 +104,53 @@ do_update() {   # $1 = throttle (yes|no)
   # The copy this script runs from may live outside the known roots (e.g. a plugin cache): refresh it too.
   case " $paths " in *" $SKILL_DIR "*) : ;; *) [ -w "$SKILL_DIR" ] && [ ! -d "$SKILL_DIR/../../.git" ] && place_copy "$newdir" "$SKILL_DIR" && paths="$paths $SKILL_DIR" ;; esac
   rm -rf "$work"
-  say "UPDATED $cur -> $remote:$paths. The new version applies from the next run."
+  say "UPDATED $cur -> $remote:$paths. Restart running agents to load it."
+}
+
+LABEL="com.github.lexus2016.task-graph-orchestration.update"
+PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
+
+stable_script() {   # the copy in the first agent root; it keeps its path across updates
+  local root
+  for root in "${ROOTS[@]}"; do
+    [ -f "$root/$NAME/scripts/update.sh" ] && [ ! -L "$root/$NAME" ] && { printf '%s' "$root/$NAME/scripts/update.sh"; return; }
+  done
+  printf '%s' "$SKILL_DIR/scripts/update.sh"
+}
+
+do_schedule() {
+  if [ "${TGO_AUTO_UPDATE:-1}" = "0" ]; then say "DISABLED"; return 0; fi
+  local script; script="$(stable_script)"
+  if [ "$(uname -s)" = "Darwin" ] && command -v launchctl >/dev/null 2>&1; then
+    mkdir -p "$(dirname "$PLIST")" "$STATE_DIR"
+    cat > "$PLIST" <<PL
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>Label</key><string>$LABEL</string>
+  <key>ProgramArguments</key><array><string>/bin/bash</string><string>$script</string><string>update</string></array>
+  <key>StartInterval</key><integer>86400</integer>
+  <key>RunAtLoad</key><true/>
+  <key>StandardOutPath</key><string>$STATE_DIR/update.log</string>
+  <key>StandardErrorPath</key><string>$STATE_DIR/update.log</string>
+</dict></plist>
+PL
+    launchctl unload "$PLIST" 2>/dev/null; launchctl load "$PLIST" 2>/dev/null
+    say "SCHEDULED launchd $LABEL (daily) -> $script"
+  elif command -v crontab >/dev/null 2>&1; then
+    ( crontab -l 2>/dev/null | grep -v "$NAME/scripts/update.sh"; echo "17 4 * * * /bin/bash $script update >/dev/null 2>&1" ) | crontab -
+    say "SCHEDULED cron daily 04:17 -> $script"
+  else
+    say "SKIPPED no-launchd-or-cron"
+  fi
+}
+
+do_unschedule() {
+  if [ -f "$PLIST" ]; then launchctl unload "$PLIST" 2>/dev/null; rm -f "$PLIST"; fi
+  if command -v crontab >/dev/null 2>&1 && crontab -l 2>/dev/null | grep -q "$NAME/scripts/update.sh"; then
+    crontab -l 2>/dev/null | grep -v "$NAME/scripts/update.sh" | crontab -
+  fi
+  say "UNSCHEDULED"
 }
 
 case "${1:-check}" in
@@ -109,6 +159,8 @@ case "${1:-check}" in
   install) paths="$(deploy "$SKILL_DIR" install)"
            if [ -n "$paths" ]; then say "INSTALLED $(local_version) ->$paths"; else say "SKIPPED no-agent-skill-roots-found"; fi ;;
   version) local_version; echo ;;
-  *)       say "usage: update.sh [check|update|install|version]"; exit 2 ;;
+  schedule)   do_schedule ;;
+  unschedule) do_unschedule ;;
+  *)       say "usage: update.sh [check|update|install|version|schedule|unschedule]"; exit 2 ;;
 esac
 exit 0

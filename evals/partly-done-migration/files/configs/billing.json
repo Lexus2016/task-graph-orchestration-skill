@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "name": "billing",
+  "server": {
+    "port": 8002,
+    "host": "10.0.0.12"
+  }
+}

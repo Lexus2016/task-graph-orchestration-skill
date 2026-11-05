@@ -43,6 +43,11 @@ Read this before creating or resuming a state file. Prefer the environment's own
       "status": "WAITING",
       "pending_op": {"kind": "ci_run", "id": "run/88231", "next_check": "2026-11-06T09:00Z"}
     },
+    "svc-033": {
+      "status": "SKIPPED",
+      "reason": "superseded",
+      "evidence": ["already on v2 in main (commit 4e1c0a2); validate.py OK"]
+    },
     "integration": {
       "status": "WAITING",
       "pending_op": {"kind": "local_process", "id": "pid:48211", "log": ".orchestration/integration.log", "next_check": "on resume"}

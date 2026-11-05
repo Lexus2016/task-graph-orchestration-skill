@@ -1,7 +1,7 @@
 {
   "name": "task-graph-orchestration",
   "description": "Agent skill for multi-part work: dependency-aware units, evidence-based acceptance checks, local failure recovery, explicit permission boundaries and SSoT loop-breaking self-review.",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "author": { "name": "Lexus2016", "url": "https://github.com/Lexus2016" },
   "homepage": "https://github.com/Lexus2016/task-graph-orchestration-skill",
   "repository": "https://github.com/Lexus2016/task-graph-orchestration-skill",

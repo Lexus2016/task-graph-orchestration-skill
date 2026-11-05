@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "name": "search",
+  "server": {
+    "port": 8003,
+    "host": "10.0.0.13"
+  }
+}

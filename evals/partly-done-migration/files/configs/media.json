@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "name": "media",
+  "server": {
+    "port": 8004,
+    "host": "10.0.0.14"
+  }
+}

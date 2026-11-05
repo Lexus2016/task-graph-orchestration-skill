@@ -27,7 +27,7 @@ one() {  # case arm n
   if [ "$arm" = "forced" ]; then
     { printf 'Use the task-graph-orchestration skill for this task.\n\n'; cat "$base/prompt-$n.txt"; } > "$base/prompt-$n.tmp" && mv "$base/prompt-$n.tmp" "$base/prompt-$n.txt"
   fi
-  ( cd "$wd" && claude -p --model "$MODEL" --setting-sources project,local \
+  ( cd "$wd" && TGO_AUTO_UPDATE=0 claude -p --model "$MODEL" --setting-sources project,local \
       --strict-mcp-config --mcp-config "$SP/empty-mcp.json" \
       --allowedTools "Read,Write,Edit,Bash,Glob,Grep,Skill" --max-turns 20 \
       --output-format stream-json --verbose "${extra[@]}" \

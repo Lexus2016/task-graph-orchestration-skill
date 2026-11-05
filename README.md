@@ -8,11 +8,11 @@
 
 <p align="center">
   <a href="LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-blue"></a>
-  <img alt="version" src="https://img.shields.io/badge/version-1.0.1-informational">
+  <img alt="version" src="https://img.shields.io/badge/version-1.1.0-informational">
   <img alt="Claude Code" src="https://img.shields.io/badge/Claude%20Code-skill%20%2B%20plugin-d97757">
   <img alt="Codex" src="https://img.shields.io/badge/Codex-skill-111111">
   <img alt="OpenCode" src="https://img.shields.io/badge/OpenCode-skill-4b5563">
-  <a href="#benchmark"><img alt="benchmark" src="https://img.shields.io/badge/benchmark-%2B1.0..1.75%20quality-brightgreen"></a>
+  <a href="#benchmark"><img alt="benchmark" src="https://img.shields.io/badge/discipline%20tasks-%2B6..13%20pp%20quality-brightgreen"></a>
 </p>
 
 <p align="center">
@@ -21,13 +21,14 @@
 
 ---
 
-On tasks where agents usually cut corners it raises a blind-judged quality score by **+1.75 (Sonnet 5.5)**, **+1.0 (Opus 5.5)** and **+0.6 (Haiku 5.5)** out of 10 — and leaves small tasks alone. [Benchmark ↓](#benchmark)
+On tasks where agents cut corners — repeated failures, reports built on subagent claims — it raises blind-judged quality by **+6 to +13 percentage points** on Haiku, Sonnet, Opus and DeepSeek, for **×1.3–1.5** the cost. [Benchmark ↓](#benchmark)
 
 One drop-in skill for **Claude Code, Codex and OpenCode** that changes how an agent runs anything bigger than a one-liner:
 
 - **Proof, not prose.** A worker saying “tests pass” is a claim. The skill makes the agent check the CI run, the file, the receipt.
 - **No blind retries.** Two identical failures in a row trigger **SSoT**: stop, name the assumption every attempt shared, change the cause — or escalate.
 - **A second look before “done”.** Before the final report the agent re-reads its own result as a reviewer who didn’t write it.
+- **Finish early, skip what's done.** After every step the agent checks the whole plan: goal already met → stop; work already in place → mark it done instead of redoing it; plan wrong → replan only the broken part.
 - **Small stays small.** A rename stays a rename: no plans, no ceremony. Orchestration switches on only when the work needs it.
 
 ## Install
@@ -56,57 +57,83 @@ The installer copies `skills/task-graph-orchestration/` into every agent skills 
 
 ## Benchmark
 
-Measured on 2026-11-05 with Claude Code 2.1.318, headless `claude -p`, clean settings (no user `CLAUDE.md`, no MCP servers), one fresh working directory per run.
+Measured on 2026-11-05 with skill v1.1.0: Claude Code 2.1.318 (`claude -p`) for Claude models, OpenCode 2.1.2 (`opencode run`) for DeepSeek V4.1 Flash. Every run starts in a fresh directory with clean settings: no user `CLAUDE.md` / `AGENTS.md`, no MCP servers, no other skills.
 
-- **Target tasks**, where the skill should matter: a fix that failed twice with the same error; a final status report built on three subagent claims, one of them without evidence.
-- **Control tasks**, where it should stay out of the way: checking four configs with two broken ones; renaming one function and running the tests.
-- **Arms:** *without* (no skill) · *loaded* (skill installed and the prompt says to use it) · *auto* (skill installed, the model decides).
-- **Scoring:** a blind judge (Sonnet 5.5, never told the arm, skill mentions redacted) gives quality 1–10 and grades each criterion; files, renames and SSoT arithmetic are checked by code.
+- **7 tasks in 3 groups.** *Discipline:* a fix that failed twice with the same error; a final report built on three subagent claims, one without evidence. *Real work:* research over five sources that disagree; a discount bug across several files with hidden tests; a migration a teammate half-finished, with a non-idempotent script. *Small:* checking four configs; renaming one function.
+- **3 arms.** *without* — no skill · *loaded* — skill installed and the prompt asks for it · *auto* — skill installed, the model decides.
+- **Scoring.** A blind judge (Sonnet 5.5) never sees the arm; skill mentions are redacted. It scores quality 1–10 (shown here as % of ideal) and grades every criterion. Hidden tests, untouched files, config values and SSoT arithmetic are checked by code.
+- **Runs per arm per task:** Haiku 5, DeepSeek 3, Sonnet 2, Opus 2 — 252 runs in total.
 
-**Quality on target tasks** (1–10, higher is better)
+**Discipline tasks (repeated failure, report built on subagent claims)** — quality, % of ideal
 
-| Model | Runs per arm | Without skill | With skill (loaded) | Δ | With skill (auto-trigger) | Δ |
+| Model | Without skill | Skill loaded | Δ | Relative | Skill auto | Δ |
 |---|---|---|---|---|---|---|
-| Haiku 5.5 | 5 | 5.90 | 6.50 | **+0.60** | 5.90 | +0.00 |
-| Sonnet 5.5 | 2 | 5.75 | 7.50 | **+1.75** | 6.25 | +0.50 |
-| Opus 5.5 | 2 | 5.75 | 6.75 | **+1.00** | 8.00 | +2.25 |
+| Haiku 5.5 | 60% | 66% | **+6 pp** | +10% | 62% | +2 pp |
+| Sonnet 5.5 | 62% | 70% | **+8 pp** | +12% | 60% | -2 pp |
+| Opus 5.5 | 62% | 72% | **+10 pp** | +16% | 65% | +2 pp |
+| DeepSeek V4.1 Flash (OpenCode) | 62% | 75% | **+13 pp** | +22% | 65% | +3 pp |
 
-**What it costs** on target tasks, *without → loaded*
+**Real work (research with conflicting sources, multi-file bug fix, half-finished migration)** — quality, % of ideal
 
-| Model | Time | Turns | Tool calls | Tokens | Cost |
-|---|---|---|---|---|---|
-| Haiku 5.5 | 22.9 → 68.3 s (×3.0) | 3.0 → 7.4 | 2.0 → 5.4 | 50k → 150k (×3.0) | $0.0024 → $0.0049 (×2.0) |
-| Sonnet 5.5 | 11.3 → 23.7 s (×2.1) | 2.0 → 3.8 | 1.0 → 1.8 | 29k → 62k (×2.1) | $0.0314 → $0.0378 (×1.2) |
-| Opus 5.5 | 11.9 → 20.2 s (×1.7) | 1.5 → 4.0 | 0.5 → 2.0 | 29k → 69k (×2.4) | $0.0572 → $0.0864 (×1.5) |
+| Model | Without skill | Skill loaded | Δ | Relative | Skill auto | Δ |
+|---|---|---|---|---|---|---|
+| Haiku 5.5 | 89% | 89% | **+1 pp** | +1% | 90% | +1 pp |
+| Sonnet 5.5 | 87% | 90% | **+3 pp** | +4% | 82% | -5 pp |
+| Opus 5.5 | 88% | 85% | **-3 pp** | -4% | 85% | -3 pp |
+| DeepSeek V4.1 Flash (OpenCode) | 90% | 86% | **-4 pp** | -5% | 89% | -1 pp |
 
-Dollar cost swings with prompt-cache warmth; tokens and turns are the steadier signal.
+**Small tasks (should stay small)** — quality, % of ideal
 
-**Small tasks stay small** (control tasks, quality 1–10)
+| Model | Without skill | Skill loaded | Δ | Relative | Skill auto | Δ |
+|---|---|---|---|---|---|---|
+| Haiku 5.5 | 89% | 87% | **-2 pp** | -2% | 90% | +1 pp |
+| Sonnet 5.5 | 90% | 88% | **-2 pp** | -3% | 85% | -5 pp |
+| Opus 5.5 | 90% | 82% | **-8 pp** | -8% | 90% | +0 pp |
+| DeepSeek V4.1 Flash (OpenCode) | 90% | 87% | **-3 pp** | -4% | 88% | -2 pp |
 
-| Model | Without skill | With skill (loaded) | With skill (auto-trigger) |
+**Cost of using the skill** — all non-small tasks, *without → loaded*
+
+| Model | Time | Tool calls | Tokens | of them cache reads | Uncached input + output | Cost |
+|---|---|---|---|---|---|---|
+| Haiku 5.5 | ×2.8 | 3.6 → 6.2 | ×1.9 | 88% → 91% | ×1.4 | ×1.5 ($0.0030 → $0.0047) |
+| Sonnet 5.5 | ×1.0 | 1.8 → 4.7 | ×1.8 | 87% → 91% | ×1.2 | ×1.3 ($0.0379 → $0.0497) |
+| Opus 5.5 | ×1.4 | 1.5 → 2.7 | ×1.8 | 86% → 90% | ×1.2 | ×1.3 ($0.0768 → $0.0997) |
+| DeepSeek V4.1 Flash (OpenCode) | ×1.6 | 7.1 → 7.5 | ×1.7 | 73% → 72% | ×1.7 | ×1.5 ($0.0022 → $0.0033) |
+
+**How often the model picks the skill up by itself** (auto arm)
+
+| Model | Discipline | Real work | Small tasks |
 |---|---|---|---|
-| Haiku 5.5 | 9.00 | 8.70 | 9.00 |
-| Sonnet 5.5 | 8.25 | 8.50 | 8.50 |
-| Opus 5.5 | 9.00 | 9.00 | 8.75 |
+| Haiku 5.5 | 0% | 0% | 0% |
+| Sonnet 5.5 | 50% | 0% | 0% |
+| Opus 5.5 | 75% | 0% | 0% |
+| DeepSeek V4.1 Flash (OpenCode) | 100% | 0% | 0% |
 
 **What the numbers say**
 
-- Loaded, the skill improves every model: **+0.6** Haiku, **+1.0** Opus, **+1.75** Sonnet. We expected the weakest model to gain most; it gains least — Haiku follows the procedure (2.7× tool calls) but turns the extra steps into little extra quality.
-- Auto-trigger depends on the model. Opus picked the skill up on 4/4 target runs and 0/4 control runs and scored **+2.25** — the best result in the table. Sonnet triggered on 2/4, Haiku on 5/10 with no gain.
-- The price is 1.7–3× time and 2–3× tokens, paid only where the skill triggers. On control tasks quality stays within ±0.3 of the baseline.
-- The benchmark changed the skill before release: round one showed **0/36** auto-triggers (fixed in the description) and ceremony on small tasks (fixed with an early “small task? stop here” exit — control quality with the skill loaded rose 7.7 → 8.7 on Haiku and 8.0 → 9.0 on Opus).
+- **Where it is built for, it works on every model.** Discipline tasks gain **+6 to +13 pp** (+10% to +22% relative) with the skill loaded. The cheapest model gains most: DeepSeek V4.1 Flash goes 62% → 75%.
+- **Real work: no measurable effect.** All four models solve the three real tasks without the skill — 100% of criteria in every arm — so there is nothing to win on correctness; quality moves within ±5 pp. These tasks turned out too easy to separate the arms; harder ones are the next step.
+- **Small tasks are the cost of forcing it.** Loaded on purpose, the skill costs 2–8 pp of polish on trivial tasks. In the *auto* arm it never triggers there (0%), so in normal use small tasks are untouched.
+- **Tokens grow ×1.7–1.9, the bill ×1.3–1.5.** The extra steps re-read context that is already cached: on Claude the cache-read share rises from 86–88% to 90–91%, and cache reads bill at a fraction of fresh input. Fresh tokens (uncached input + output) grow only ×1.2–1.4 on Claude; DeepSeek caches less and pays ×1.5.
+- **Auto-trigger is the weak spot.** Without being asked, DeepSeek used the skill on 100% of discipline runs, Opus on 75%, Sonnet on 50%, Haiku on 0%.
 
-*Caveats:* four tasks; 5 runs per arm per task on Haiku, 2 on Sonnet and Opus; the judge shares a model family with two of the subjects. Per-task numbers: [`evals/benchmark/RESULTS.md`](evals/benchmark/RESULTS.md). Raw summary: [`evals/benchmark/summary.json`](evals/benchmark/summary.json).
+**How the benchmark changed the skill.** The first v1.1.0 run lost up to 19 pp on real work. The transcripts showed why: agents ran the auto-update script mid-task and pasted SSoT lines and notes about the skill into their answers. Both moved out of the agent's path — updates now run outside tasks, and the deliverable is about the work only. One grader was also fixed: it penalised *adding* tests, which the prompt never forbade (editing or deleting existing tests still fails it).
 
-## What changes
+*Caveats:* small samples (2–5 runs per arm per task); the judge shares a model family with three of the four subjects; real-work tasks hit the ceiling. Per-task numbers with every token class: [`evals/benchmark/RESULTS.md`](evals/benchmark/RESULTS.md).
 
-| Situation | Agent without the skill | Agent with the skill |
-|---|---|---|
-| Subagent reports “all tests pass” with no CI link | Repeats it in the final report | Checks the evidence, reports the unverified part as unverified |
-| Same error twice | Tries a third variation of the same fix | Runs SSoT, names the shared wrong assumption, tests a new cause |
-| Batch of 40 items, 3 fail | “Done!” | 37 DONE with evidence, 3 FAILED with cause, nothing hidden |
-| Tiny edit | Fine | Exactly the same — no plan, no ritual |
-| Session dies mid-run | Starts over | Resumes from the state file; never repeats an external write |
+## What the skill makes the agent do
+
+| Situation | Behaviour the skill asks for |
+|---|---|
+| Subagent reports “all tests pass” with no CI link | Check the evidence; report the unverified part as unverified |
+| Same error twice | Run SSoT, name the shared wrong assumption, test a new cause or escalate |
+| Batch of 40 items, 3 fail | 37 DONE with evidence, 3 FAILED with cause, nothing hidden |
+| A teammate already did half the work | Inspect the target before writing; mark finished units done; do only the rest |
+| Goal reached before the plan ran out | Stop, skip the remaining units as `superseded`, report |
+| Session dies mid-run | Resume from the state file; never repeat an external write |
+| Tiny edit | Nothing extra — no plan, no ritual |
+
+The benchmark measures the first two rows directly; the others are covered by the skill's rules and the half-finished-migration task, where models already did well without it.
 
 ## How it works
 
@@ -117,6 +144,7 @@ Dollar cost swings with prompt-cache warmth; tokens and turns are the steadier s
 | **Units** | Each with input, output, check, dependencies, effect (`read-only` / `reversible` / `consequential`) and a budget. |
 | **Failure classes** | Transient, wrong artifact, faulty plan, permission denied, uncertain external write, still pending — each with its own recovery. |
 | **Permissions** | Risk, permission and confidence are separate questions. Past success never widens what the agent may do. |
+| **Checkpoint** | After every unit result: contract met → stop early; output already exists → `DONE` without running; unit no longer needed → `SKIPPED (superseded)`; plan wrong → replan the affected subgraph. Criteria, not units, are required. |
 | **SSoT** | A deliberate pause plus a structured re-look — on loops, before the final decision, and on request. |
 | **State** | JSON state file with single writer, atomic writes, cleanup list, and a run history for recurring workflows. |
 
@@ -134,7 +162,13 @@ The characters only create the pause. The re-look does the work: list the attemp
 
 ## Auto-update
 
-After a planned (LITE or FULL) run the skill runs `bash scripts/update.sh check`, off the critical path: at most once a day it compares its `VERSION` with this repository, downloads the tagged release, validates it, and refreshes every local copy for the next run. It never blocks work and exits 0 when offline. Opt out with `TGO_AUTO_UPDATE=0`.
+The agent never updates itself mid-task. Updates arrive from outside its work:
+
+- `install.sh` schedules a daily background check — `launchd` on macOS, `cron` on Linux.
+- The Claude Code plugin checks once per session (`SessionStart` hook).
+- Manually: `bash ~/.claude/skills/task-graph-orchestration/scripts/update.sh update`.
+
+The check compares `VERSION` with this repository, downloads the tagged release, validates its name and version, and swaps every local copy atomically. Offline it does nothing. Turn it off with `bash <skill>/scripts/update.sh unschedule`, or install with `TGO_AUTO_UPDATE=0`.
 
 ## Works with
 
@@ -149,8 +183,10 @@ After a planned (LITE or FULL) run the skill runs `bash scripts/update.sh check`
 
 ```text
 skills/task-graph-orchestration/   the skill (SKILL.md, references/, scripts/update.sh, VERSION)
-evals/                             A/B test cases: prompt, expected outcome, graders
-.claude-plugin/                    Claude Code plugin + marketplace manifests
+evals/                             7 A/B test cases: prompt, expected outcome, graders, input files
+evals/harness/                     runners for Claude Code and OpenCode, blind judge, summarizer
+evals/benchmark/                   published results: RESULTS.md (per task), summary.json
+.claude-plugin/ · hooks/           Claude Code plugin + marketplace manifests · SessionStart update hook
 install.sh · PROMPT.md             one-line install · paste-into-agent install
 ```
 
@@ -158,9 +194,11 @@ install.sh · PROMPT.md             one-line install · paste-into-agent install
 
 ```bash
 git clone https://github.com/Lexus2016/task-graph-orchestration-skill && cd task-graph-orchestration-skill
-MODEL=claude-haiku-5-5 bash evals/harness/ab-run.sh 5 6                 # 4 tasks × 3 arms × 5 runs → .bench/ab/
-AB=.bench/ab python3 -I evals/harness/ab-judge.py                       # blind judge → .bench/ab/results.json
-python3 -I evals/harness/summarize.py "Haiku 5.5=.bench/ab/results.json"  # the tables above
+MODEL=claude-haiku-5-5 bash evals/harness/ab-run.sh 5 6                       # Claude Code: 7 tasks × 3 arms × 5 runs → .bench/ab/
+MODEL=ollama-cloud/deepseek-v4.1-flash:1017 OUT=.bench/ab-ds \
+  bash evals/harness/ab-run-opencode.sh 3 4                                    # OpenCode, any model it can reach
+AB=.bench/ab python3 -I evals/harness/ab-judge.py                             # blind judge → .bench/ab/results.json
+python3 -I evals/harness/summarize.py "Haiku 5.5=.bench/ab/results.json" "DeepSeek=.bench/ab-ds/results.json"
 ```
 
 `claude plugin eval . --allow-tools Write Edit Bash --scaffold` runs the same cases through Claude Code's built-in runner (its Bash sandbox refuses to start on machines whose `~/.ssh` contains symlinks — the harness above has no such limit). Each case in `evals/` is plain Markdown + YAML, so you can also run it by hand in any agent.

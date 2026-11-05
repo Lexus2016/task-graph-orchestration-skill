@@ -13,11 +13,14 @@ WAITING → VERIFYING                  the operation reached a terminal state
 any active state → BLOCKED           missing input, permission or capability
 BLOCKED → READY                      the missing item arrived
 DONE → STALE → READY                 an upstream input, version or criterion changed
-READY | BLOCKED → SKIPPED            only for units marked optional in the completion contract
+READY → DONE                         the output already exists and passes its check (no run needed)
+READY | BLOCKED | RUNNING → SKIPPED  optional unit, or `superseded`: the criteria it served already have evidence
+any non-terminal → SKIPPED           the whole completion contract is met (early finish)
 ```
 
 - **FAILED** records what happened; it needs no permission and must be reported.
-- **SKIPPED** is a decision, allowed only for optional units. A skipped required unit leaves the request incomplete.
+- **SKIPPED** is a decision with a reason: `optional`, or `superseded` plus the evidence that made the unit unnecessary. Required criteria, not units, decide completeness: a skipped unit is fine when its criteria are met another way; a required criterion without evidence leaves the request incomplete.
+- **Checkpoint** (SKILL.md section 4) runs after every unit result; it is where early finish, skips and replans are decided.
 - **STALE** replaces silent reuse: when an input changes, mark exactly the affected descendants STALE and leave unaffected branches DONE.
 - The graph has many finished branches at once. Resume from the set of unit statuses, never from a single "last position".
 
