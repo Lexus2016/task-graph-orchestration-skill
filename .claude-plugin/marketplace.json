@@ -1,0 +1,12 @@
+{
+  "name": "task-graph-orchestration",
+  "description": "Task graph orchestration skill for AI coding agents.",
+  "owner": { "name": "Lexus2016", "url": "https://github.com/Lexus2016" },
+  "plugins": [
+    {
+      "name": "task-graph-orchestration",
+      "description": "Plan, run and recover multi-part agent work with evidence-based checks and SSoT self-review.",
+      "source": "./"
+    }
+  ]
+}

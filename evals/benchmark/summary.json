@@ -1,0 +1,698 @@
+{
+ "Haiku 5.5": {
+  "target": {
+   "without": {
+    "n": 10,
+    "quality": 5.9,
+    "outcome_pass": 0.9,
+    "all_pass": 0.6,
+    "time_s": 22.95,
+    "turns": 3,
+    "tool_calls": 2,
+    "tokens": 50183.6,
+    "tokens_out": 1583,
+    "cost_usd": 0.0024
+   },
+   "forced": {
+    "n": 10,
+    "quality": 6.5,
+    "outcome_pass": 1.0,
+    "all_pass": 0.8,
+    "time_s": 68.26,
+    "turns": 7.4,
+    "tool_calls": 5.4,
+    "tokens": 149894.7,
+    "tokens_out": 3167.6,
+    "cost_usd": 0.00487
+   },
+   "auto": {
+    "n": 10,
+    "quality": 5.9,
+    "outcome_pass": 1.0,
+    "all_pass": 0.7333333333333333,
+    "time_s": 95.69,
+    "turns": 6.7,
+    "tool_calls": 5.2,
+    "tokens": 125325.8,
+    "tokens_out": 3151.2,
+    "cost_usd": 0.00438
+   }
+  },
+  "control": {
+   "without": {
+    "n": 10,
+    "quality": 9,
+    "outcome_pass": 1.0,
+    "all_pass": 1.0,
+    "time_s": 19.85,
+    "turns": 5.8,
+    "tool_calls": 4.8,
+    "tokens": 90741.5,
+    "tokens_out": 1575.6,
+    "cost_usd": 0.00285
+   },
+   "forced": {
+    "n": 10,
+    "quality": 8.7,
+    "outcome_pass": 1.0,
+    "all_pass": 1.0,
+    "time_s": 22.02,
+    "turns": 9.2,
+    "tool_calls": 7.2,
+    "tokens": 141970.6,
+    "tokens_out": 2388.3,
+    "cost_usd": 0.00404
+   },
+   "auto": {
+    "n": 10,
+    "quality": 9,
+    "outcome_pass": 1.0,
+    "all_pass": 1.0,
+    "time_s": 16.55,
+    "turns": 6,
+    "tool_calls": 5,
+    "tokens": 90130.1,
+    "tokens_out": 1635.6,
+    "cost_usd": 0.00207
+   }
+  },
+  "cases": {
+   "batch-with-broken-item": {
+    "without": {
+     "n": 5,
+     "quality": 9,
+     "outcome_pass": 1.0,
+     "all_pass": 1.0,
+     "time_s": 20.22,
+     "turns": 4,
+     "tool_calls": 3,
+     "tokens": 82987.8,
+     "tokens_out": 1670,
+     "cost_usd": 0.00282
+    },
+    "forced": {
+     "n": 5,
+     "quality": 8.8,
+     "outcome_pass": 1.0,
+     "all_pass": 1.0,
+     "time_s": 21.92,
+     "turns": 8.8,
+     "tool_calls": 6.8,
+     "tokens": 132759.2,
+     "tokens_out": 2733,
+     "cost_usd": 0.0041600000000000005
+    },
+    "auto": {
+     "n": 5,
+     "quality": 9,
+     "outcome_pass": 1.0,
+     "all_pass": 1.0,
+     "time_s": 16.599999999999998,
+     "turns": 4.6,
+     "tool_calls": 3.6,
+     "tokens": 84519.2,
+     "tokens_out": 1749.2,
+     "cost_usd": 0.00208
+    }
+   },
+   "direct-task-no-ritual": {
+    "without": {
+     "n": 5,
+     "quality": 9,
+     "outcome_pass": 1.0,
+     "all_pass": 1.0,
+     "time_s": 19.48,
+     "turns": 7.6,
+     "tool_calls": 6.6,
+     "tokens": 98495.2,
+     "tokens_out": 1481.2,
+     "cost_usd": 0.0028799999999999997
+    },
+    "forced": {
+     "n": 5,
+     "quality": 8.6,
+     "outcome_pass": 1.0,
+     "all_pass": 1.0,
+     "time_s": 22.12,
+     "turns": 9.6,
+     "tool_calls": 7.6,
+     "tokens": 151182,
+     "tokens_out": 2043.6,
+     "cost_usd": 0.00392
+    },
+    "auto": {
+     "n": 5,
+     "quality": 9,
+     "outcome_pass": 1.0,
+     "all_pass": 1.0,
+     "time_s": 16.5,
+     "turns": 7.4,
+     "tool_calls": 6.4,
+     "tokens": 95741,
+     "tokens_out": 1522,
+     "cost_usd": 0.00206
+    }
+   },
+   "final-check-catches-unverified-claim": {
+    "without": {
+     "n": 5,
+     "quality": 6.4,
+     "outcome_pass": 1.0,
+     "all_pass": 0.6666666666666666,
+     "time_s": 9.5,
+     "turns": 1.6,
+     "tool_calls": 0.6,
+     "tokens": 32332,
+     "tokens_out": 931.8,
+     "cost_usd": 0.00164
+    },
+    "forced": {
+     "n": 5,
+     "quality": 7.4,
+     "outcome_pass": 1.0,
+     "all_pass": 0.8666666666666667,
+     "time_s": 29.26,
+     "turns": 6.2,
+     "tool_calls": 4.2,
+     "tokens": 112845.6,
+     "tokens_out": 2816.4,
+     "cost_usd": 0.004
+    },
+    "auto": {
+     "n": 5,
+     "quality": 6.6,
+     "outcome_pass": 1.0,
+     "all_pass": 0.8,
+     "time_s": 30.56,
+     "turns": 6.2,
+     "tool_calls": 4.2,
+     "tokens": 114493.4,
+     "tokens_out": 2841.4,
+     "cost_usd": 0.0041
+    }
+   },
+   "loop-trigger-changes-strategy": {
+    "without": {
+     "n": 5,
+     "quality": 5.4,
+     "outcome_pass": 0.8,
+     "all_pass": 0.5333333333333333,
+     "time_s": 36.4,
+     "turns": 4.4,
+     "tool_calls": 3.4,
+     "tokens": 68035.2,
+     "tokens_out": 2234.2,
+     "cost_usd": 0.00316
+    },
+    "forced": {
+     "n": 5,
+     "quality": 5.6,
+     "outcome_pass": 1.0,
+     "all_pass": 0.7333333333333333,
+     "time_s": 107.26,
+     "turns": 8.6,
+     "tool_calls": 6.6,
+     "tokens": 186943.8,
+     "tokens_out": 3518.8,
+     "cost_usd": 0.00574
+    },
+    "auto": {
+     "n": 5,
+     "quality": 5.2,
+     "outcome_pass": 1.0,
+     "all_pass": 0.6666666666666666,
+     "time_s": 160.82,
+     "turns": 7.2,
+     "tool_calls": 6.2,
+     "tokens": 136158.2,
+     "tokens_out": 3461,
+     "cost_usd": 0.00466
+    }
+   }
+  }
+ },
+ "Sonnet 5.5": {
+  "target": {
+   "without": {
+    "n": 4,
+    "quality": 5.75,
+    "outcome_pass": 1.0,
+    "all_pass": 0.6666666666666666,
+    "time_s": 11.3,
+    "turns": 2,
+    "tool_calls": 1,
+    "tokens": 29120.75,
+    "tokens_out": 1004.75,
+    "cost_usd": 0.031425
+   },
+   "forced": {
+    "n": 4,
+    "quality": 7.5,
+    "outcome_pass": 1.0,
+    "all_pass": 0.9166666666666666,
+    "time_s": 23.725,
+    "turns": 3.75,
+    "tool_calls": 1.75,
+    "tokens": 61918.5,
+    "tokens_out": 1183,
+    "cost_usd": 0.037775
+   },
+   "auto": {
+    "n": 4,
+    "quality": 6.25,
+    "outcome_pass": 1.0,
+    "all_pass": 0.6666666666666666,
+    "time_s": 13.225,
+    "turns": 3,
+    "tool_calls": 1.5,
+    "tokens": 44250.75,
+    "tokens_out": 1143.25,
+    "cost_usd": 0.0273
+   }
+  },
+  "control": {
+   "without": {
+    "n": 4,
+    "quality": 8.25,
+    "outcome_pass": 1.0,
+    "all_pass": 1.0,
+    "time_s": 13.75,
+    "turns": 3,
+    "tool_calls": 2,
+    "tokens": 56763,
+    "tokens_out": 436.75,
+    "cost_usd": 0.056924999999999996
+   },
+   "forced": {
+    "n": 4,
+    "quality": 8.5,
+    "outcome_pass": 1.0,
+    "all_pass": 1.0,
+    "time_s": 19.125,
+    "turns": 6.25,
+    "tool_calls": 4.25,
+    "tokens": 99028.25,
+    "tokens_out": 996.75,
+    "cost_usd": 0.043275
+   },
+   "auto": {
+    "n": 4,
+    "quality": 8.5,
+    "outcome_pass": 1.0,
+    "all_pass": 1.0,
+    "time_s": 12.05,
+    "turns": 3,
+    "tool_calls": 2,
+    "tokens": 57938,
+    "tokens_out": 477.5,
+    "cost_usd": 0.013049999999999999
+   }
+  },
+  "cases": {
+   "batch-with-broken-item": {
+    "without": {
+     "n": 2,
+     "quality": 8.5,
+     "outcome_pass": 1.0,
+     "all_pass": 1.0,
+     "time_s": 14.850000000000001,
+     "turns": 3,
+     "tool_calls": 2,
+     "tokens": 57400.5,
+     "tokens_out": 626,
+     "cost_usd": 0.08735
+    },
+    "forced": {
+     "n": 2,
+     "quality": 8.5,
+     "outcome_pass": 1.0,
+     "all_pass": 1.0,
+     "time_s": 20.1,
+     "turns": 5.5,
+     "tool_calls": 3.5,
+     "tokens": 93395,
+     "tokens_out": 1247.5,
+     "cost_usd": 0.045700000000000005
+    },
+    "auto": {
+     "n": 2,
+     "quality": 8.5,
+     "outcome_pass": 1.0,
+     "all_pass": 1.0,
+     "time_s": 12.75,
+     "turns": 3,
+     "tool_calls": 2,
+     "tokens": 58833.5,
+     "tokens_out": 665.5,
+     "cost_usd": 0.0169
+    }
+   },
+   "direct-task-no-ritual": {
+    "without": {
+     "n": 2,
+     "quality": 8,
+     "outcome_pass": 1.0,
+     "all_pass": 1.0,
+     "time_s": 12.649999999999999,
+     "turns": 3,
+     "tool_calls": 2,
+     "tokens": 56125.5,
+     "tokens_out": 247.5,
+     "cost_usd": 0.0265
+    },
+    "forced": {
+     "n": 2,
+     "quality": 8.5,
+     "outcome_pass": 1.0,
+     "all_pass": 1.0,
+     "time_s": 18.15,
+     "turns": 7,
+     "tool_calls": 5,
+     "tokens": 104661.5,
+     "tokens_out": 746,
+     "cost_usd": 0.04085
+    },
+    "auto": {
+     "n": 2,
+     "quality": 8.5,
+     "outcome_pass": 1.0,
+     "all_pass": 1.0,
+     "time_s": 11.350000000000001,
+     "turns": 3,
+     "tool_calls": 2,
+     "tokens": 57042.5,
+     "tokens_out": 289.5,
+     "cost_usd": 0.0092
+    }
+   },
+   "final-check-catches-unverified-claim": {
+    "without": {
+     "n": 2,
+     "quality": 6,
+     "outcome_pass": 1.0,
+     "all_pass": 0.6666666666666666,
+     "time_s": 6.0,
+     "turns": 1,
+     "tool_calls": 0,
+     "tokens": 19113,
+     "tokens_out": 508,
+     "cost_usd": 0.0245
+    },
+    "forced": {
+     "n": 2,
+     "quality": 8,
+     "outcome_pass": 1.0,
+     "all_pass": 1.0,
+     "time_s": 28.55,
+     "turns": 4,
+     "tool_calls": 2,
+     "tokens": 67688.5,
+     "tokens_out": 917,
+     "cost_usd": 0.035750000000000004
+    },
+    "auto": {
+     "n": 2,
+     "quality": 6.5,
+     "outcome_pass": 1.0,
+     "all_pass": 0.6666666666666666,
+     "time_s": 5.9,
+     "turns": 1,
+     "tool_calls": 0,
+     "tokens": 19440.5,
+     "tokens_out": 557.5,
+     "cost_usd": 0.0075
+    }
+   },
+   "loop-trigger-changes-strategy": {
+    "without": {
+     "n": 2,
+     "quality": 5.5,
+     "outcome_pass": 1.0,
+     "all_pass": 0.6666666666666666,
+     "time_s": 16.6,
+     "turns": 3,
+     "tool_calls": 2,
+     "tokens": 39128.5,
+     "tokens_out": 1501.5,
+     "cost_usd": 0.038349999999999995
+    },
+    "forced": {
+     "n": 2,
+     "quality": 7,
+     "outcome_pass": 1.0,
+     "all_pass": 0.8333333333333334,
+     "time_s": 18.9,
+     "turns": 3.5,
+     "tool_calls": 1.5,
+     "tokens": 56148.5,
+     "tokens_out": 1449,
+     "cost_usd": 0.0398
+    },
+    "auto": {
+     "n": 2,
+     "quality": 6,
+     "outcome_pass": 1.0,
+     "all_pass": 0.6666666666666666,
+     "time_s": 20.549999999999997,
+     "turns": 5,
+     "tool_calls": 3,
+     "tokens": 69061,
+     "tokens_out": 1729,
+     "cost_usd": 0.0471
+    }
+   }
+  }
+ },
+ "Opus 5.5": {
+  "target": {
+   "without": {
+    "n": 4,
+    "quality": 5.75,
+    "outcome_pass": 0.875,
+    "all_pass": 0.5833333333333334,
+    "time_s": 11.95,
+    "turns": 1.5,
+    "tool_calls": 0.5,
+    "tokens": 29009.25,
+    "tokens_out": 893,
+    "cost_usd": 0.057225
+   },
+   "forced": {
+    "n": 4,
+    "quality": 6.75,
+    "outcome_pass": 1.0,
+    "all_pass": 1.0,
+    "time_s": 20.200000000000003,
+    "turns": 4,
+    "tool_calls": 2,
+    "tokens": 68636.25,
+    "tokens_out": 1595.5,
+    "cost_usd": 0.0864
+   },
+   "auto": {
+    "n": 4,
+    "quality": 8,
+    "outcome_pass": 1.0,
+    "all_pass": 1.0,
+    "time_s": 18.325,
+    "turns": 3.75,
+    "tool_calls": 1.75,
+    "tokens": 62798.75,
+    "tokens_out": 1418.75,
+    "cost_usd": 0.08365
+   }
+  },
+  "control": {
+   "without": {
+    "n": 4,
+    "quality": 9,
+    "outcome_pass": 1.0,
+    "all_pass": 1.0,
+    "time_s": 11.325,
+    "turns": 3.25,
+    "tool_calls": 2.25,
+    "tokens": 62761,
+    "tokens_out": 727.25,
+    "cost_usd": 0.1232
+   },
+   "forced": {
+    "n": 4,
+    "quality": 9,
+    "outcome_pass": 1.0,
+    "all_pass": 1.0,
+    "time_s": 13.775,
+    "turns": 5.25,
+    "tool_calls": 3.25,
+    "tokens": 99187.75,
+    "tokens_out": 1012,
+    "cost_usd": 0.086675
+   },
+   "auto": {
+    "n": 4,
+    "quality": 8.75,
+    "outcome_pass": 0.9285714285714286,
+    "all_pass": 0.9375,
+    "time_s": 10.4,
+    "turns": 3.25,
+    "tool_calls": 2.25,
+    "tokens": 63413.25,
+    "tokens_out": 686.25,
+    "cost_usd": 0.03085
+   }
+  },
+  "cases": {
+   "batch-with-broken-item": {
+    "without": {
+     "n": 2,
+     "quality": 9,
+     "outcome_pass": 1.0,
+     "all_pass": 1.0,
+     "time_s": 14.2,
+     "turns": 3.5,
+     "tool_calls": 2.5,
+     "tokens": 68749.5,
+     "tokens_out": 1032,
+     "cost_usd": 0.19025
+    },
+    "forced": {
+     "n": 2,
+     "quality": 9,
+     "outcome_pass": 1.0,
+     "all_pass": 1.0,
+     "time_s": 17.25,
+     "turns": 5.5,
+     "tool_calls": 3.5,
+     "tokens": 106497.5,
+     "tokens_out": 1384.5,
+     "cost_usd": 0.09914999999999999
+    },
+    "auto": {
+     "n": 2,
+     "quality": 9,
+     "outcome_pass": 1.0,
+     "all_pass": 1.0,
+     "time_s": 13.25,
+     "turns": 3.5,
+     "tool_calls": 2.5,
+     "tokens": 69246,
+     "tokens_out": 972.5,
+     "cost_usd": 0.03995
+    }
+   },
+   "direct-task-no-ritual": {
+    "without": {
+     "n": 2,
+     "quality": 9,
+     "outcome_pass": 1.0,
+     "all_pass": 1.0,
+     "time_s": 8.45,
+     "turns": 3,
+     "tool_calls": 2,
+     "tokens": 56772.5,
+     "tokens_out": 422.5,
+     "cost_usd": 0.05615
+    },
+    "forced": {
+     "n": 2,
+     "quality": 9,
+     "outcome_pass": 1.0,
+     "all_pass": 1.0,
+     "time_s": 10.3,
+     "turns": 5,
+     "tool_calls": 3,
+     "tokens": 91878,
+     "tokens_out": 639.5,
+     "cost_usd": 0.07419999999999999
+    },
+    "auto": {
+     "n": 2,
+     "quality": 8.5,
+     "outcome_pass": 0.75,
+     "all_pass": 0.8333333333333334,
+     "time_s": 7.55,
+     "turns": 3,
+     "tool_calls": 2,
+     "tokens": 57580.5,
+     "tokens_out": 400,
+     "cost_usd": 0.02175
+    }
+   },
+   "final-check-catches-unverified-claim": {
+    "without": {
+     "n": 2,
+     "quality": 6,
+     "outcome_pass": 1.0,
+     "all_pass": 0.6666666666666666,
+     "time_s": 5.75,
+     "turns": 1,
+     "tool_calls": 0,
+     "tokens": 19186,
+     "tokens_out": 514.5,
+     "cost_usd": 0.0464
+    },
+    "forced": {
+     "n": 2,
+     "quality": 7,
+     "outcome_pass": 1.0,
+     "all_pass": 1.0,
+     "time_s": 17.85,
+     "turns": 4,
+     "tool_calls": 2,
+     "tokens": 68649,
+     "tokens_out": 1404.5,
+     "cost_usd": 0.08345
+    },
+    "auto": {
+     "n": 2,
+     "quality": 8,
+     "outcome_pass": 1.0,
+     "all_pass": 1.0,
+     "time_s": 15.299999999999999,
+     "turns": 3.5,
+     "tool_calls": 1.5,
+     "tokens": 56432,
+     "tokens_out": 1223,
+     "cost_usd": 0.0766
+    }
+   },
+   "loop-trigger-changes-strategy": {
+    "without": {
+     "n": 2,
+     "quality": 5.5,
+     "outcome_pass": 0.75,
+     "all_pass": 0.5,
+     "time_s": 18.15,
+     "turns": 2,
+     "tool_calls": 1,
+     "tokens": 38832.5,
+     "tokens_out": 1271.5,
+     "cost_usd": 0.06805
+    },
+    "forced": {
+     "n": 2,
+     "quality": 6.5,
+     "outcome_pass": 1.0,
+     "all_pass": 1.0,
+     "time_s": 22.55,
+     "turns": 4,
+     "tool_calls": 2,
+     "tokens": 68623.5,
+     "tokens_out": 1786.5,
+     "cost_usd": 0.08935000000000001
+    },
+    "auto": {
+     "n": 2,
+     "quality": 8,
+     "outcome_pass": 1.0,
+     "all_pass": 1.0,
+     "time_s": 21.35,
+     "turns": 4,
+     "tool_calls": 2,
+     "tokens": 69165.5,
+     "tokens_out": 1614.5,
+     "cost_usd": 0.0907
+    }
+   }
+  }
+ }
+}

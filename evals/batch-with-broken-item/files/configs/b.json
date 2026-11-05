@@ -1,0 +1,1 @@
+{"name": "worker", "port": 9090, "replicas": 3}
