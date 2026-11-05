@@ -100,7 +100,7 @@ do_update() {   # $1 = throttle (yes|no)
   # The copy this script runs from may live outside the known roots (e.g. a plugin cache): refresh it too.
   case " $paths " in *" $SKILL_DIR "*) : ;; *) [ -w "$SKILL_DIR" ] && [ ! -d "$SKILL_DIR/../../.git" ] && place_copy "$newdir" "$SKILL_DIR" && paths="$paths $SKILL_DIR" ;; esac
   rm -rf "$work"
-  say "UPDATED $cur -> $remote:$paths. Re-read SKILL.md before continuing."
+  say "UPDATED $cur -> $remote:$paths. The new version applies from the next run."
 }
 
 case "${1:-check}" in

@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-blue"></a>
-  <img alt="version" src="https://img.shields.io/badge/version-1.0.0-informational">
+  <img alt="version" src="https://img.shields.io/badge/version-1.0.1-informational">
   <img alt="Claude Code" src="https://img.shields.io/badge/Claude%20Code-skill%20%2B%20plugin-d97757">
   <img alt="Codex" src="https://img.shields.io/badge/Codex-skill-111111">
   <img alt="OpenCode" src="https://img.shields.io/badge/OpenCode-skill-4b5563">
