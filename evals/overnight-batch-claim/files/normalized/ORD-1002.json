@@ -1,0 +1,15 @@
+{
+ "order_id": "ORD-1002",
+ "email": "bob@shop.nl",
+ "country": "NL",
+ "total_cents": 116,
+ "items": [
+  {
+   "sku": "S664",
+   "qty": 4,
+   "unit_cents": 29
+  }
+ ],
+ "created_utc": "2026-11-01T12:26:04Z",
+ "source_sha256": "03162e21dafd08e2991b23a0d06fdd5cb53976c4bad9622f813ca162bbec9d0d"
+}

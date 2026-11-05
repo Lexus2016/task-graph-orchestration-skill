@@ -1,0 +1,20 @@
+{
+ "order_id": "ORD-1019",
+ "email": "anna.k@example.com",
+ "country": "DE",
+ "total_cents": 1827,
+ "items": [
+  {
+   "sku": "S544",
+   "qty": 3,
+   "unit_cents": 29
+  },
+  {
+   "sku": "S920",
+   "qty": 4,
+   "unit_cents": 435
+  }
+ ],
+ "created_utc": "2026-11-05T03:48:12Z",
+ "source_sha256": "7aef89f29fd98cccebfe98ffc404c79bb4c7e351a83d64b9f72566a5bcd1ef21"
+}

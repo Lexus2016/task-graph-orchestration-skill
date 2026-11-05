@@ -1,0 +1,25 @@
+{
+ "order_id": "ORD-1004",
+ "email": "anna.k@example.com",
+ "country": "UK",
+ "total_cents": 8923,
+ "items": [
+  {
+   "sku": "S161",
+   "qty": 2,
+   "unit_cents": 435
+  },
+  {
+   "sku": "S199",
+   "qty": 1,
+   "unit_cents": 57
+  },
+  {
+   "sku": "S796",
+   "qty": 4,
+   "unit_cents": 1999
+  }
+ ],
+ "created_utc": "2026-11-02T02:37:36Z",
+ "source_sha256": "aea7ed47ea16a1c3bf329a6140f574a75272ed2f9f1afe5cb7828fd4bebf1f8c"
+}

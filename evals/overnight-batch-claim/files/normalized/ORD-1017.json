@@ -1,0 +1,25 @@
+{
+ "order_id": "ORD-1017",
+ "email": "bob@shop.nl",
+ "country": "GB",
+ "total_cents": 7647,
+ "items": [
+  {
+   "sku": "S583",
+   "qty": 3,
+   "unit_cents": 115
+  },
+  {
+   "sku": "S809",
+   "qty": 3,
+   "unit_cents": 435
+  },
+  {
+   "sku": "S927",
+   "qty": 3,
+   "unit_cents": 1999
+  }
+ ],
+ "created_utc": "2026-11-04T11:46:01Z",
+ "source_sha256": "f0f1f0ddd40e43d17bf225b6ad96d61d2518a4f06f17e5fe52826ad1896ddb0d"
+}

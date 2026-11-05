@@ -1,0 +1,20 @@
+{
+ "order_id": "ORD-1025",
+ "email": "Mixed.Case@Example.COM",
+ "country": "DE",
+ "total_cents": 1533,
+ "items": [
+  {
+   "sku": "S620",
+   "qty": 4,
+   "unit_cents": 57
+  },
+  {
+   "sku": "S809",
+   "qty": 3,
+   "unit_cents": 435
+  }
+ ],
+ "created_utc": "2026-11-04T05:09:32Z",
+ "source_sha256": "4bb11523124a9685af7bd01d7b328270234bce61b79188c1d923a7fc683194b6"
+}

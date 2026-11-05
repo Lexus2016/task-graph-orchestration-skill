@@ -3,3 +3,4 @@ evals/results-*.log
 .orchestration/
 .DS_Store
 .bench/
+__pycache__/

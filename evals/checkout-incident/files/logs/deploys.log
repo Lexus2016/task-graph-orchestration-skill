@@ -1,0 +1,4 @@
+2026-10-21T13:31:12Z deploy gateway v5.12.0 (routing table refresh) by ci
+2026-10-21T13:55:40Z deploy inventory v2.3.0 (new 'available' field, deprecates 'stock_level') by ci
+2026-10-21T14:02:18Z config payments: psp.timeout_ms 2000 -> 50 (PR #8812 "tune PSP timeouts for p99") by m.ortega
+2026-10-21T14:25:03Z config payments: psp.timeout_ms 50 -> 2000 (manual hotfix, not committed) by oncall

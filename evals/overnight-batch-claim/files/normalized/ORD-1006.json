@@ -1,0 +1,25 @@
+{
+ "order_id": "ORD-1006",
+ "email": "zoe@fr.fr",
+ "country": "FR",
+ "total_cents": 7794,
+ "items": [
+  {
+   "sku": "S140",
+   "qty": 1,
+   "unit_cents": 57
+  },
+  {
+   "sku": "S255",
+   "qty": 4,
+   "unit_cents": 435
+  },
+  {
+   "sku": "S686",
+   "qty": 3,
+   "unit_cents": 1999
+  }
+ ],
+ "created_utc": "2026-11-01T02:32:26Z",
+ "source_sha256": "29a3d17e5d4231f714e3db43021dac012fca945c56dd2c2a4be85281d26dea27"
+}

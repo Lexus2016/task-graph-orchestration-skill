@@ -4,7 +4,7 @@ Concrete tools for the capabilities in `../runtime-adapter.md` — same rows, sa
 
 | Capability | Claude Code tool |
 |---|---|
-| **Workers** | `Agent` tool with the BRIEF as its prompt. A subagent sees only its brief: include task-local context, owned outputs, user restrictions and the RETURN format. |
+| **Workers** | `Agent` tool with the BRIEF as its prompt; the model comes from the agent type (`.claude/agents/*.md` frontmatter), so pick a cheaper type for mechanical units if one exists. A subagent sees only its brief: include task-local context, owned outputs, user restrictions and the RETURN format. |
 | **Parallelism** | Several `Agent` calls in one message. A deterministic multi-agent pipeline: `Workflow` tool, only when the user explicitly opted into multi-agent orchestration. Cap = the lower of the agent caps in `settings.json` and the session's workflow size guideline. |
 | **Isolated code edits** | `Agent` with `isolation: "worktree"`, or `EnterWorktree` / `ExitWorktree`. |
 | **Task store** | The session's task / todo tool if listed; otherwise the state file. |

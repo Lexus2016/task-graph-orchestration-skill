@@ -1,0 +1,13 @@
+{
+ "order_id": "ORD-1011",
+ "email": " JAN@Mail.DE ",
+ "country": "BELGIUM",
+ "created_at": "2026-11-02T22:54:32+05:30",
+ "items": [
+  {
+   "sku": "S567",
+   "qty": 4,
+   "price": 4.35
+  }
+ ]
+}

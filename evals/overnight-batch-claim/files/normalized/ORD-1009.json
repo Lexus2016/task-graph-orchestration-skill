@@ -1,0 +1,25 @@
+{
+ "order_id": "ORD-1009",
+ "email": "jan@mail.de",
+ "country": "GB",
+ "total_cents": 2975,
+ "items": [
+  {
+   "sku": "S254",
+   "qty": 1,
+   "unit_cents": 115
+  },
+  {
+   "sku": "S254",
+   "qty": 2,
+   "unit_cents": 1200
+  },
+  {
+   "sku": "S799",
+   "qty": 4,
+   "unit_cents": 115
+  }
+ ],
+ "created_utc": "2026-11-04T22:17:45Z",
+ "source_sha256": "006103c2680bab11a48aa73976acb2aaad773f82b16d4f182bb1da2bce34e329"
+}

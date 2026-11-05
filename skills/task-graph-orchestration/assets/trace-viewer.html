@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Task Graph Replay</title>
+<style>
+:root{
+  --bg:#f7f7f5;--panel:#ffffff;--ink:#1d1f23;--muted:#6b7079;--line:#e3e3df;--soft:#f0f0ec;
+  --ready:#9aa1ab;--running:#2f6fdf;--verify:#7a5af5;--done:#1f9d55;--repair:#d97706;--wait:#0891b2;
+  --blocked:#c2410c;--stale:#a16207;--failed:#dc2626;--skipped:#9ca3af;--accent:#2f6fdf;--warn:#b45309;--err:#dc2626;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111316;--panel:#191c20;--ink:#e8e9eb;--muted:#9aa0a8;--line:#2a2e34;--soft:#20242a;
+  --ready:#6b7280;--running:#5b8def;--verify:#9b82f7;--done:#34c47a;--repair:#f0a030;--wait:#22b8d4;
+  --blocked:#f07a3a;--stale:#d4a72c;--failed:#f05252;--skipped:#6b7280;--accent:#5b8def;--warn:#f0a030;--err:#f05252;}}
+:root[data-theme="dark"]{
+  --bg:#111316;--panel:#191c20;--ink:#e8e9eb;--muted:#9aa0a8;--line:#2a2e34;--soft:#20242a;
+  --ready:#6b7280;--running:#5b8def;--verify:#9b82f7;--done:#34c47a;--repair:#f0a030;--wait:#22b8d4;
+  --blocked:#f07a3a;--stale:#d4a72c;--failed:#f05252;--skipped:#6b7280;--accent:#5b8def;--warn:#f0a030;--err:#f05252;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif}
+header{padding:16px 20px 8px;display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between}
+h1{font-size:18px;margin:0;font-weight:650}
+.goal{color:var(--muted);max-width:820px}
+.pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;border:1px solid var(--line);background:var(--panel);margin-right:6px}
+select,button{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 10px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+main{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:12px;padding:0 20px 20px}
+@media (max-width:900px){main{grid-template-columns:1fr;padding:0 16px 16px}header{padding:16px}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px}
+.card h2{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:600}
+#graphWrap{overflow:auto;min-height:340px}
+svg text{fill:var(--ink)}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 0}
+input[type=range]{flex:1;min-width:160px;accent-color:var(--accent)}
+.now{margin-top:10px;padding:10px;border-radius:8px;background:var(--soft);min-height:44px}
+.log{max-height:360px;overflow:auto;font-size:13px}
+.log div{padding:4px 6px;border-radius:6px;cursor:pointer;display:flex;gap:8px}
+.log div.cur{background:var(--soft);outline:1px solid var(--accent)}
+.log div.future{opacity:.38}
+.seq{color:var(--muted);font-variant-numeric:tabular-nums;min-width:26px}
+.ev{font-weight:600;min-width:78px}
+.findings div{padding:6px 8px;border-radius:6px;margin-bottom:6px;background:var(--soft);font-size:13px}
+.sev-error{border-left:3px solid var(--err)}.sev-warn{border-left:3px solid var(--warn)}.sev-info{border-left:3px solid var(--muted)}.sev-ok{border-left:3px solid var(--done)}
+.crit{display:flex;gap:8px;align-items:flex-start;font-size:13px;margin:4px 0}
+.dot{width:10px;height:10px;border-radius:50%;margin-top:5px;flex:none}
+.legend{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;color:var(--muted);margin-top:8px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+#strip{height:34px;position:relative;margin-top:10px;border-radius:6px;background:var(--soft)}
+#strip i{position:absolute;top:6px;width:3px;height:22px;border-radius:2px;background:var(--muted);opacity:.55}
+#strip i.sub{top:18px;height:10px;background:var(--verify)}
+#strip i.tr{background:var(--accent);opacity:1}
+#strip b{position:absolute;top:0;width:2px;height:34px;background:var(--err)}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;font-size:13px}
+.stats div span{display:block;color:var(--muted);font-size:12px}
+.side{display:flex;flex-direction:column;gap:12px}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1 id="title">Task graph replay</h1>
+    <div class="goal" id="goal"></div>
+  </div>
+  <div><select id="runSel" aria-label="Run"></select> <button id="theme" aria-label="Toggle theme">◐</button></div>
+</header>
+<main>
+  <section class="card">
+    <h2>Graph</h2>
+    <div id="graphWrap"><svg id="graph" role="img" aria-label="Task graph"></svg></div>
+    <div class="legend" id="legend"></div>
+    <div class="controls">
+      <button id="first" aria-label="First">⏮</button><button id="prev" aria-label="Previous">◀</button>
+      <button id="play" aria-label="Play">▶ Play</button><button id="next" aria-label="Next">▶|</button><button id="last" aria-label="Last">⏭</button>
+      <input type="range" id="slider" min="0" value="0" aria-label="Event">
+      <select id="ver" aria-label="Graph version"></select>
+      <select id="speed" aria-label="Speed"><option value="1400">slow</option><option value="700" selected>normal</option><option value="250">fast</option></select>
+    </div>
+    <div class="now" id="now"></div>
+    <div id="stripWrap"><h2 style="margin:12px 0 4px">Tool calls (grey: orchestrator · violet: subagents · blue: trace writes)</h2><div id="strip"></div></div>
+  </section>
+  <aside class="side">
+    <div class="card"><h2>Findings</h2><div class="findings" id="findings"></div></div>
+    <div class="card"><h2>Criteria</h2><div id="criteria"></div></div>
+    <div class="card"><h2>Run</h2><div class="stats" id="stats"></div></div>
+    <div class="card"><h2>Events</h2><div class="log" id="log"></div></div>
+  </aside>
+</main>
+<script>
+const BUNDLE = /*__BUNDLE__*/null;
+const DATA = BUNDLE && BUNDLE.runs && BUNDLE.runs.length ? BUNDLE
+  : {runs:[{label:"empty", events:[], calls:[], findings:[{severity:"info", code:"no-data", message:"No trace embedded."}], meta:{}}]};
+const COLORS = {READY:"--ready",RUNNING:"--running",VERIFYING:"--verify",DONE:"--done",REPAIR:"--repair",WAITING:"--wait",
+  BLOCKED:"--blocked",STALE:"--stale",FAILED:"--failed",SKIPPED:"--skipped",PLANNED:"--ready",REMOVED:"--skipped"};
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let run = null, k = 0, timer = null;
+
+function allUnits(events){
+  const units = {}, order = [];
+  for (const e of events){
+    const list = e.ev === "plan" ? (e.units||[]) : e.ev === "replan" ? (e.add||[]) : [];
+    for (const u of list){ if (!units[u.id]) order.push(u.id); units[u.id] = Object.assign({}, units[u.id]||{}, u); }
+    if ((e.ev === "status" || e.ev === "skip") && e.unit && !units[e.unit]){ units[e.unit] = {id:e.unit, title:e.unit, depends:[]}; order.push(e.unit); }
+  }
+  return {units, order};
+}
+function layout(units, order){
+  const depth = {}, seen = new Set();
+  const d = id => { if (depth[id] !== undefined) return depth[id]; if (seen.has(id)) return 0; seen.add(id);
+    const deps = (units[id].depends||[]).filter(x => units[x]); depth[id] = deps.length ? 1 + Math.max(...deps.map(d)) : 0; return depth[id]; };
+  order.forEach(d);
+  const cols = {}; order.forEach(id => (cols[depth[id]] = cols[depth[id]] || []).push(id));
+  const W = 230, H = 64, GX = 64, GY = 18, pos = {};
+  let maxRows = 0;
+  Object.keys(cols).forEach(c => { cols[c].forEach((id, i) => pos[id] = {x: 16 + c*(W+GX), y: 16 + i*(H+GY)}); maxRows = Math.max(maxRows, cols[c].length); });
+  const ncols = Object.keys(cols).length || 1;
+  return {pos, W, H, width: 32 + ncols*W + (ncols-1)*GX, height: 32 + maxRows*(H+GY)};
+}
+function stateAt(events, upto){
+  const st = {added:new Set(), status:{}, evidence:new Set(), crit:new Set(), removed:new Set(), stale:new Set(), criteria:{}};
+  for (let i = 0; i <= upto && i < events.length; i++){
+    const e = events[i];
+    if (e.ev === "plan"){ (e.criteria||[]).forEach(c => st.criteria[c.id] = c); (e.units||[]).forEach(u => { st.added.add(u.id); st.status[u.id] = st.status[u.id] || "PLANNED"; }); }
+    if (e.ev === "replan"){ (e.add||[]).forEach(u => { st.added.add(u.id); st.status[u.id] = "PLANNED"; }); (e.remove||[]).forEach(id => st.removed.add(id)); (e.stale||[]).forEach(id => st.status[id] = "STALE"); }
+    if (e.ev === "status"){ st.added.add(e.unit); st.status[e.unit] = e.to; }
+    if (e.ev === "skip"){ st.added.add(e.unit); st.status[e.unit] = "SKIPPED"; }
+    if (e.ev === "evidence"){ st.evidence.add(e.unit); if (e.criterion) st.crit.add(e.criterion); }
+    if (e.ev === "delegate"){ st.added.add(e.unit); st.worker = st.worker || {}; st.worker[e.unit] = e.worker || "worker"; if (!["DONE","FAILED","SKIPPED"].includes(st.status[e.unit])) st.status[e.unit] = "RUNNING"; }
+    if (e.ev === "failure"){ st.added.add(e.unit); st.fails = st.fails || {}; st.fails[e.unit] = (st.fails[e.unit] || 0) + 1; if (!["DONE","FAILED","SKIPPED"].includes(st.status[e.unit])) st.status[e.unit] = "REPAIR"; }
+    if (e.ev === "return"){ if (!["DONE","FAILED","SKIPPED"].includes(st.status[e.unit])) st.status[e.unit] = e.status === "blocked" ? "BLOCKED" : "VERIFYING"; }
+  }
+  return st;
+}
+function describe(e){
+  switch (e.ev){
+    case "plan": return `Plan · ${e.mode||""} · ${(e.units||[]).length} units, ${(e.criteria||[]).length} criteria`;
+    case "status": return `${e.unit} → ${e.to}${e.note ? " · "+e.note : ""}`;
+    case "evidence": return `${e.unit} evidence for ${e.criterion||"—"} (${e.kind||""}): ${e.ref||""}`;
+    case "checkpoint": return `Checkpoint after ${e.after||"—"}: ${e.decision||""}${e.reason ? " — "+e.reason : ""}`;
+    case "skip": return `Skip ${e.unit} (${e.reason||"?"})${e.by ? " — "+e.by : ""}`;
+    case "replan": return `Replan: +${(e.add||[]).map(u=>u.id).join(",")||"0"} −${(e.remove||[]).join(",")||"0"}${e.reason ? " — "+e.reason : ""}`;
+    case "ssot": return `SSoT (${e.trigger||""}) ${e.line||""}${e.outcome ? " → "+e.outcome : ""}`;
+    case "delegate": return `Delegate ${e.unit} to ${e.worker||"worker"} · brief ${e.brief_chars??"?"} chars`;
+    case "return": return `${e.worker||"worker"} returned ${e.status||""} for ${e.unit} · ${e.return_chars??"?"} chars`;
+    case "failure": return `${e.unit} failed: ${e.signature||""} · tested: ${e.cause||"?"}${e.next ? " → next: "+e.next : ""}`;
+    case "final": return `Final: ${e.result||""}${(e.gaps||[]).length ? " · gaps: "+e.gaps.join("; ") : ""}`;
+    default: return JSON.stringify(e);
+  }
+}
+function draw(){
+  const ev = run.events, {units, order} = allUnits(ev), L = layout(units, order), st = stateAt(ev, k), cur = ev[k] || {};
+  const svg = document.getElementById("graph");
+  svg.setAttribute("viewBox", `0 0 ${L.width} ${L.height}`); svg.setAttribute("width", L.width); svg.setAttribute("height", L.height);
+  let s = `<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="${css("--muted")}"/></marker></defs>`;
+  for (const id of order){ if (!st.added.has(id)) continue;
+    for (const dep of (units[id].depends||[])){ const a = L.pos[dep], b = L.pos[id]; if (!a || !b || !st.added.has(dep)) continue;
+      const x1 = a.x + L.W, y1 = a.y + L.H/2, x2 = b.x, y2 = b.y + L.H/2, mx = (x1+x2)/2;
+      s += `<path d="M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2-2},${y2}" fill="none" stroke="${css("--line")}" stroke-width="2" marker-end="url(#ar)"/>`; } }
+  for (const id of order){ if (!st.added.has(id)) continue;
+    const p = L.pos[id], status = st.removed.has(id) ? "REMOVED" : (st.status[id] || "PLANNED"), col = css(COLORS[status] || "--ready");
+    const focus = cur.unit === id || cur.after === id || (cur.ev === "replan" && (cur.add||[]).some(u => u.id === id));
+    const dash = status === "SKIPPED" || status === "REMOVED" ? ' stroke-dasharray="5 4"' : "";
+    s += `<g opacity="${status === "REMOVED" ? .35 : 1}"><rect x="${p.x}" y="${p.y}" width="${L.W}" height="${L.H}" rx="10" fill="${css("--panel")}" stroke="${col}" stroke-width="${focus ? 4 : 2}"${dash}/>`;
+    s += `<rect x="${p.x}" y="${p.y}" width="6" height="${L.H}" rx="3" fill="${col}"/>`;
+    s += `<text x="${p.x+16}" y="${p.y+24}" font-size="13" font-weight="600">${esc((units[id].title||id).length > 30 ? (units[id].title||id).slice(0,29) + "…" : (units[id].title||id))}</text>`;
+    s += `<text x="${p.x+16}" y="${p.y+46}" font-size="12" style="fill:${col}">${esc(id)} · ${status}${st.worker && st.worker[id] ? " · " + esc(st.worker[id]) : ""}${st.fails && st.fails[id] ? " · ✗" + st.fails[id] : ""}${st.evidence.has(id) ? " · ✓ evidence" : ""}</text></g>`; }
+  svg.innerHTML = s;
+  const vnum = ev.slice(0, k+1).filter(e => e.ev === "plan" || e.ev === "replan").length;
+  document.getElementById("now").innerHTML = ev.length ? `<span class="pill">graph v${vnum || 1}</span><span class="pill">step ${k+1} / ${ev.length}</span> <b>#${cur.seq ?? k+1}</b> ${esc(describe(cur))}` : "No events.";
+  const crit = Object.values(st.criteria);
+  document.getElementById("criteria").innerHTML = crit.length ? crit.map(c => `<div class="crit"><span class="dot" style="background:${css(st.crit.has(c.id) ? "--done" : c.required ? "--ready" : "--line")}"></span><span><b>${esc(c.id)}</b>${c.required ? "" : " (optional)"} ${esc(c.text)}</span></div>`).join("") : '<span style="color:var(--muted)">Not planned yet.</span>';
+  document.querySelectorAll("#log div").forEach((d, i) => { d.className = i === k ? "cur" : i > k ? "future" : ""; });
+  const logEl = document.getElementById("log"), curEl = logEl.querySelector("div.cur");
+  if (curEl) logEl.scrollTop = curEl.offsetTop - logEl.offsetTop - logEl.clientHeight / 2;
+  document.getElementById("slider").value = k;
+  try { history.replaceState(null, "", `#${DATA.runs.length > 1 ? "run=" + DATA.runs.indexOf(run) + "&" : ""}step=${k+1}`); } catch (_) {}
+  const strip = document.getElementById("strip"), calls = run.calls || [];
+  if (calls.length){ const n = calls.length, at = cur._call;
+    strip.innerHTML = calls.map((c, i) => `<i class="${c.sub ? "sub" : ""} ${/\.trace\.jsonl/.test(c.label) ? "tr" : ""}" style="left:${(i/(n))*100}%" title="${esc(c.tool+": "+c.label)}"></i>`).join("") + (at != null ? `<b style="left:${(at/n)*100}%"></b>` : "");
+  }
+}
+function load(i){
+  run = DATA.runs[i]; k = 0; stop();
+  const plan = run.events.find(e => e.ev === "plan") || {}, fin = [...run.events].reverse().find(e => e.ev === "final");
+  document.getElementById("title").textContent = `Task graph replay — ${run.label}`;
+  document.getElementById("goal").innerHTML = `${esc(plan.goal || "")}<div style="margin-top:6px"><span class="pill">${esc(plan.mode || "?")}</span><span class="pill">${run.events.length} events</span>${fin ? `<span class="pill">final: ${esc(fin.result)}</span>` : ""}</div>`;
+  const sl = document.getElementById("slider"); sl.max = Math.max(0, run.events.length - 1);
+  const vers = []; run.events.forEach((e, i) => { if (e.ev === "plan" || e.ev === "replan") vers.push(i); });
+  const fi = run.events.findIndex(e => e.ev === "final");
+  document.getElementById("ver").innerHTML = '<option value="" disabled selected>Graph version…</option>'
+    + vers.map((i, n) => `<option value="${i}">v${n+1} · ${n ? "replan" : "plan"} (#${run.events[i].seq ?? i+1})</option>`).join("")
+    + (fi >= 0 ? `<option value="${fi}">final (#${run.events[fi].seq ?? fi+1})</option>` : "");
+  document.getElementById("log").innerHTML = run.events.map((e, i) => `<div data-i="${i}"><span class="seq">${e.seq ?? i+1}</span><span class="ev">${esc(e.ev)}</span><span>${esc(describe(e))}</span></div>`).join("");
+  document.querySelectorAll("#log div").forEach(d => d.onclick = () => { k = +d.dataset.i; draw(); });
+  const f = run.findings || [];
+  document.getElementById("findings").innerHTML = (f.length ? f : [{severity:"ok", code:"clean", message:"No findings."}]).map(x => `<div class="sev-${x.severity}"><b>${esc(x.severity)}</b> · <code>${esc(x.code)}</code><br>${esc(x.message)}</div>`).join("");
+  const m = run.meta || {}, sum = a => (a||[]).reduce((p, c) => p + c, 0), calls = run.calls || [];
+  const deleg = run.events.filter(e => e.ev === "delegate");
+  document.getElementById("stats").innerHTML = [
+    ["Duration", m.duration_s != null ? m.duration_s + " s" : "—"], ["Cost", m.cost_usd != null ? "$" + (+m.cost_usd).toFixed(4) : "—"],
+    ["Orchestrator calls", calls.filter(c => !c.sub).length || "—"], ["Subagent calls", calls.filter(c => c.sub).length || "—"],
+    ["Orchestrator tokens", sum(m.main) ? sum(m.main).toLocaleString() : "—"], ["Peak context", m.peak_main_context ? m.peak_main_context.toLocaleString() : "—"],
+    ["Subagent tokens", sum(m.main) ? sum(m.sub).toLocaleString() : "—"], ["Delegations", deleg.length]
+  ].map(([a, b]) => `<div><span>${a}</span>${b}</div>`).join("");
+  document.getElementById("stripWrap").style.display = calls.length ? "" : "none";
+  document.getElementById("legend").innerHTML = ["PLANNED","RUNNING","VERIFYING","DONE","REPAIR","WAITING","BLOCKED","STALE","FAILED","SKIPPED"].map(s => `<span><span class="dot" style="background:${css(COLORS[s])}"></span>${s}</span>`).join("");
+  draw();
+}
+function stop(){ clearInterval(timer); timer = null; document.getElementById("play").textContent = "▶ Play"; }
+function play(){ if (timer){ stop(); return; } if (k >= run.events.length - 1) k = 0;
+  document.getElementById("play").textContent = "❚❚ Pause";
+  timer = setInterval(() => { if (k >= run.events.length - 1){ stop(); return; } k++; draw(); }, +document.getElementById("speed").value); }
+document.getElementById("play").onclick = play;
+document.getElementById("next").onclick = () => { stop(); k = Math.min(run.events.length - 1, k + 1); draw(); };
+document.getElementById("prev").onclick = () => { stop(); k = Math.max(0, k - 1); draw(); };
+document.getElementById("first").onclick = () => { stop(); k = 0; draw(); };
+document.getElementById("last").onclick = () => { stop(); k = run.events.length - 1; draw(); };
+document.getElementById("slider").oninput = e => { stop(); k = +e.target.value; draw(); };
+document.getElementById("speed").onchange = () => { if (timer){ stop(); play(); } };
+document.getElementById("theme").onclick = () => { const r = document.documentElement, dark = matchMedia("(prefers-color-scheme: dark)").matches;
+  r.dataset.theme = (r.dataset.theme || (dark ? "dark" : "light")) === "dark" ? "light" : "dark"; draw(); };
+document.addEventListener("keydown", e => { if (e.key === "ArrowRight") document.getElementById("next").click(); if (e.key === "ArrowLeft") document.getElementById("prev").click(); if (e.key === " "){ e.preventDefault(); play(); } });
+const sel = document.getElementById("runSel");
+sel.innerHTML = DATA.runs.map((r, i) => `<option value="${i}">${esc(r.label)}</option>`).join("");
+sel.style.display = DATA.runs.length > 1 ? "" : "none";
+sel.onchange = () => load(+sel.value);
+document.getElementById("ver").onchange = e => { stop(); k = +e.target.value; draw(); };
+const hp = new URLSearchParams(location.hash.slice(1));
+const r0 = Math.min(DATA.runs.length - 1, Math.max(0, +(hp.get("run") || 0)));
+sel.value = r0; load(r0);
+if (hp.get("step")){ k = Math.min(run.events.length - 1, Math.max(0, +hp.get("step") - 1)); draw(); }
+</script>
+</body>
+</html>

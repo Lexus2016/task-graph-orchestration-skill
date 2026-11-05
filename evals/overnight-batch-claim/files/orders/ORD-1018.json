@@ -1,0 +1,18 @@
+{
+ "order_id": "ORD-1018",
+ "email": "  Anna.K@Example.com",
+ "country": "Great Britain",
+ "created_at": "2026-11-01T07:30:12+02:00",
+ "items": [
+  {
+   "sku": "S594",
+   "qty": 1,
+   "price": 4.35
+  },
+  {
+   "sku": "S768",
+   "qty": 3,
+   "price": 12
+  }
+ ]
+}

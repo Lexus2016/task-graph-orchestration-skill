@@ -1,0 +1,13 @@
+schema_version: "1.1"
+name: checkout-incident
+expected_outcome: |
+  Root cause: the 14:02:18 config change psp.timeout_ms 2000 -> 50 (PR #8812); payments
+  calls time out after 50 ms from 14:03, checkout fails, gateway returns 502. Contributing
+  factor: the PSP client retries every error immediately (no backoff, also on 4xx), which
+  grows into a retry storm with 429 rate limits and reused idempotency keys from ~14:06.
+  The 13:55 inventory deploy is a red herring: its warnings are non-blocking and continue
+  after recovery. The 14:25 hotfix was manual and not committed, so config/payments.yaml
+  still says 50 and must be fixed. The client must stop retrying non-retryable 4xx and back
+  off between attempts, keeping the configured attempt cap. Existing tests stay and pass.
+context:
+  scaffold_script: place-files.sh

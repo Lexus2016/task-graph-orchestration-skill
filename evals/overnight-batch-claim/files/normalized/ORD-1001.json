@@ -1,0 +1,15 @@
+{
+ "order_id": "ORD-1001",
+ "email": "jan@mail.de",
+ "country": "GB",
+ "total_cents": 57,
+ "items": [
+  {
+   "sku": "S474",
+   "qty": 1,
+   "unit_cents": 57
+  }
+ ],
+ "created_utc": "2026-11-04T14:33:04Z",
+ "source_sha256": "4df70e2265c32160c6db7755f9c92c42b410144e39325af72b5d74a9e9f4863a"
+}

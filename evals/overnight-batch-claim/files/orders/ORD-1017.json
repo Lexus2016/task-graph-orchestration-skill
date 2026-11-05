@@ -1,0 +1,23 @@
+{
+ "order_id": "ORD-1017",
+ "email": "bob@shop.nl",
+ "country": "Great Britain",
+ "created_at": "2026-11-04T11:46:01+00:00",
+ "items": [
+  {
+   "sku": "S583",
+   "qty": 3,
+   "price": 1.15
+  },
+  {
+   "sku": "S809",
+   "qty": 3,
+   "price": 4.35
+  },
+  {
+   "sku": "S927",
+   "qty": 3,
+   "price": 19.99
+  }
+ ]
+}

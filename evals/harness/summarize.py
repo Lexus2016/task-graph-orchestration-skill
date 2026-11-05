@@ -7,11 +7,13 @@ REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 CATEGORIES = {
     "discipline": ["loop-trigger-changes-strategy", "final-check-catches-unverified-claim"],
     "real": ["research-conflicting-sources", "programming-multifile-fix", "partly-done-migration"],
+    "fanout": ["vendor-contracts-review"],
     "small": ["batch-with-broken-item", "direct-task-no-ritual"],
 }
 CAT_TITLE = {"discipline": "Discipline tasks (repeated failure, report built on subagent claims)",
              "real": "Real work (research with conflicting sources, multi-file bug fix, half-finished migration)",
-             "small": "Small tasks (should stay small)"}
+             "small": "Small tasks (should stay small)",
+             "fanout": "Fan-out research (10 long contracts, ~63k tokens to review)"}
 ARMS = ("without", "forced", "auto")
 TOK = ("tok_uncached", "tok_cache_write", "tok_cache_read", "tok_out")
 
@@ -31,6 +33,8 @@ def agg(rs):
     for k in TOK:
         a[k] = mean(r.get(k, 0) for r in rs)
     a["tokens"] = sum(a[k] for k in TOK)
+    for k in ("orch_tokens", "sub_tokens", "peak_context", "delegations"):
+        a[k] = mean(r.get(k, 0) or 0 for r in rs)
     a["cache_read_share"] = 100 * a["tok_cache_read"] / a["tokens"] if a["tokens"] else float("nan")
     return a
 
@@ -44,7 +48,7 @@ def main():
         for cat, cases in CATEGORIES.items():
             s["categories"][cat] = {arm: agg([r for r in R if r["arm"] == arm and r["case"] in cases])
                                     for arm in ARMS if any(r["arm"] == arm and r["case"] in cases for r in R)}
-        s["categories"]["work"] = {arm: agg([r for r in R if r["arm"] == arm and r["case"] not in CATEGORIES["small"]]) for arm in ARMS}
+        s["categories"]["work"] = {arm: agg([r for r in R if r["arm"] == arm and r["case"] not in CATEGORIES["small"] + CATEGORIES["fanout"]]) for arm in ARMS}
         for c in sorted({r["case"] for r in R}):
             s["cases"][c] = {arm: agg([r for r in R if r["arm"] == arm and r["case"] == c]) for arm in ARMS
                              if any(r["arm"] == arm and r["case"] == c for r in R)}
@@ -57,6 +61,8 @@ def main():
     rel = lambda a, b: f"{(b - a) / a * 100:+.0f}%" if a else "—"
     out = []
     for cat in ("discipline", "real", "small"):
+        if not all(cat in summary[l]["categories"] and summary[l]["categories"][cat] for l, _ in models):
+            continue
         out.append(f"**{CAT_TITLE[cat]}** — quality, % of ideal")
         out.append("")
         out.append("| Model | Without skill | Skill loaded | Δ | Relative | Skill auto | Δ |")
@@ -65,6 +71,18 @@ def main():
             c = summary[label]["categories"][cat]
             w, f, a = c["without"]["quality_pct"], c["forced"]["quality_pct"], c["auto"]["quality_pct"]
             out.append(f"| {label} | {pct(w)} | {pct(f)} | **{pp(f - w)}** | {rel(w, f)} | {pct(a)} | {pp(a - w)} |")
+        out.append("")
+    if any(summary[l]["categories"].get("fanout") for l, _ in models):
+        out.append(f"**{CAT_TITLE['fanout']}**")
+        out.append("")
+        out.append("| Model | Arm | Quality | Criteria passed | Delegations | Orchestrator tokens | Peak context | Subagent tokens | Time | Cost |")
+        out.append("|---|---|---|---|---|---|---|---|---|---|")
+        for label, _ in models:
+            for arm, a in summary[label]["categories"].get("fanout", {}).items():
+                name = {"without": "without", "forced": "loaded", "auto": "auto"}[arm]
+                out.append(f"| {label} | {name} | {pct(a['quality_pct'])} | {pct(a['outcome_pct'])} | {a['delegations']:.1f} | "
+                           + (f"{a['orch_tokens']/1000:.0f}k | {a['peak_context']/1000:.0f}k | {a['sub_tokens']/1000:.0f}k | " if a['orch_tokens'] else "n/a | n/a | n/a | ")
+                           + f"{a['time_s']:.0f} s | ${a['cost_usd']:.3f} |")
         out.append("")
     out.append("**Cost of using the skill** — all non-small tasks, *without → loaded*")
     out.append("")

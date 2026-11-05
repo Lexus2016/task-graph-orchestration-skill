@@ -1,0 +1,28 @@
+{
+ "order_id": "ORD-1026",
+ "email": "bob@shop.nl",
+ "country": "France",
+ "created_at": "2026-11-02T14:08:26+00:00",
+ "items": [
+  {
+   "sku": "S552",
+   "qty": 3,
+   "price": 0.29
+  },
+  {
+   "sku": "S787",
+   "qty": 2,
+   "price": 4.35
+  },
+  {
+   "sku": "S174",
+   "qty": 2,
+   "price": 12
+  },
+  {
+   "sku": "S410",
+   "qty": 1,
+   "price": 1.15
+  }
+ ]
+}

@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-blue"></a>
-  <img alt="version" src="https://img.shields.io/badge/version-1.1.0-informational">
+  <img alt="version" src="https://img.shields.io/badge/version-1.2.0-informational">
   <img alt="Claude Code" src="https://img.shields.io/badge/Claude%20Code-skill%20%2B%20plugin-d97757">
   <img alt="Codex" src="https://img.shields.io/badge/Codex-skill-111111">
   <img alt="OpenCode" src="https://img.shields.io/badge/OpenCode-skill-4b5563">
@@ -29,6 +29,8 @@ One drop-in skill for **Claude Code, Codex and OpenCode** that changes how an ag
 - **No blind retries.** Two identical failures in a row trigger **SSoT**: stop, name the assumption every attempt shared, change the cause — or escalate.
 - **A second look before “done”.** Before the final report the agent re-reads its own result as a reviewer who didn’t write it.
 - **Finish early, skip what's done.** After every step the agent checks the whole plan: goal already met → stop; work already in place → mark it done instead of redoing it; plan wrong → replan only the broken part.
+- **Delegate only when it pays.** Narrow first (headings, keywords, a short script), then read; hand work to subagents only when the reading they absorb outweighs their startup cost — with a minimal brief (paths, not contents) and a bounded answer.
+- **See the run, not just the result.** Long runs end with a link to an animated replay of the task graph — every plan, replan, skip, checkpoint and SSoT — plus automatic checks of how the agent followed the method.
 - **Small stays small.** A rename stays a rename: no plans, no ceremony. Orchestration switches on only when the work needs it.
 
 ## Install
@@ -121,6 +123,19 @@ Measured on 2026-11-05 with skill v1.1.0: Claude Code 2.1.318 (`claude -p`) for 
 
 *Caveats:* small samples (2–5 runs per arm per task); the judge shares a model family with three of the four subjects; real-work tasks hit the ceiling. Per-task numbers with every token class: [`evals/benchmark/RESULTS.md`](evals/benchmark/RESULTS.md).
 
+## Graph replay
+
+<p align="center"><img src="assets/graph-replay.png" alt="Animated replay of a task graph: units, statuses, criteria with evidence, findings and the tool-call timeline" width="900"></p>
+
+When a run is long enough to plan as a graph (FULL mode, or when you ask), the agent records every change to that graph and finishes with a link like `file:///…/.orchestration/vendor-compliance.graph.html`. The page is a single self-contained file:
+
+- **Play, pause, step, drag** through the run; **jump to any graph version** (v1 = first plan, v2… = each replan) or share `#step=N`.
+- **Criteria light up** as evidence arrives; delegated units show their worker; removed and skipped units stay visible as dashed boxes.
+- **Findings** — automatic checks of the method: DONE only after evidence, a checkpoint after every unit result, skips with a reason, a final SSoT, “complete” only when every required criterion has evidence, briefs and returns kept small.
+- With the run transcript (`trace_graph.py analyze --run …`) it also ties every event to the real tool call and splits tokens between the orchestrator and its subagents.
+
+Example: [four models on the same 10-contract review](https://htmlpreview.github.io/?https://github.com/Lexus2016/task-graph-orchestration-skill/blob/main/examples/replay-vendor-contracts.html) — Haiku, Sonnet, Opus and DeepSeek, all 10/10 correct, three of four traces clean.
+
 ## What the skill makes the agent do
 
 | Situation | Behaviour the skill asks for |
@@ -145,7 +160,9 @@ The benchmark measures the first two rows directly; the others are covered by th
 | **Failure classes** | Transient, wrong artifact, faulty plan, permission denied, uncertain external write, still pending — each with its own recovery. |
 | **Permissions** | Risk, permission and confidence are separate questions. Past success never widens what the agent may do. |
 | **Checkpoint** | After every unit result: contract met → stop early; output already exists → `DONE` without running; unit no longer needed → `SKIPPED (superseded)`; plan wrong → replan the affected subgraph. Criteria, not units, are required. |
+| **Delegation** | Narrow before reading; delegate only units whose unavoidable reading dwarfs a worker's startup; brief = minimum sufficient context; return = conclusions, not raw material; cheap model for mechanical units. |
 | **SSoT** | A deliberate pause plus a structured re-look — on loops, before the final decision, and on request. |
+| **Graph trace** | In FULL mode (or on request) the agent appends graph events to `.orchestration/<goal>.trace.jsonl` and ends with a link to the rendered replay page. |
 | **State** | JSON state file with single writer, atomic writes, cleanup list, and a run history for recurring workflows. |
 
 ### SSoT in one minute
@@ -182,7 +199,8 @@ The check compares `VERSION` with this repository, downloads the tagged release,
 ## Repository layout
 
 ```text
-skills/task-graph-orchestration/   the skill (SKILL.md, references/, scripts/update.sh, VERSION)
+skills/task-graph-orchestration/   the skill: SKILL.md, references/, scripts/ (update.sh, trace_graph.py), assets/trace-viewer.html, VERSION
+examples/                          replay pages of real traced runs
 evals/                             7 A/B test cases: prompt, expected outcome, graders, input files
 evals/harness/                     runners for Claude Code and OpenCode, blind judge, summarizer
 evals/benchmark/                   published results: RESULTS.md (per task), summary.json

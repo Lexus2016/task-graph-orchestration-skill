@@ -1,0 +1,15 @@
+{
+ "order_id": "ORD-1022",
+ "email": "bob@shop.nl",
+ "country": "BE",
+ "total_cents": 1305,
+ "items": [
+  {
+   "sku": "S857",
+   "qty": 3,
+   "unit_cents": 435
+  }
+ ],
+ "created_utc": "2026-11-03T16:26:53Z",
+ "source_sha256": "794fde350426305f4dab32db23296fac65eba926dbdb6841fb588d40d5350ab0"
+}

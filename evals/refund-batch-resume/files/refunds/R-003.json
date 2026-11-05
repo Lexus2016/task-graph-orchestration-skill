@@ -1,0 +1,9 @@
+{
+ "id": "R-003",
+ "customer_email": "customer003@example.com",
+ "order_id": "O-70021",
+ "order_date": "2026-09-29",
+ "request_date": "2026-10-09",
+ "amount_eur": 37.66,
+ "reason_text": "damaged"
+}

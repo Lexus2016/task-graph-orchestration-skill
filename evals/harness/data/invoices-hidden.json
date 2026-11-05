@@ -1,0 +1,896 @@
+[
+ {
+  "id": "N-2317",
+  "customer": "Kettle & Co",
+  "currency": "USD",
+  "status": "open",
+  "issued_at": "2026-10-12T11:15:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU39",
+    "qty": 3,
+    "unit_price": 100
+   },
+   {
+    "sku": "SKU21",
+    "qty": 4,
+    "unit_price": 9.99
+   }
+  ]
+ },
+ {
+  "id": "C-202",
+  "customer": null,
+  "currency": "GBP",
+  "status": "open",
+  "issued_at": "2026-10-12T03:15:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU14",
+    "qty": 4,
+    "unit_price": 49
+   },
+   {
+    "sku": "SKU86",
+    "qty": 4,
+    "unit_price": 3.35
+   }
+  ]
+ },
+ {
+  "id": "N-2315",
+  "customer": "Acme BV",
+  "currency": "EUR",
+  "status": "open",
+  "issued_at": "2026-10-26T14:00:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU90",
+    "qty": 3,
+    "unit_price": 3.35
+   },
+   {
+    "sku": "SKU77",
+    "qty": 5,
+    "unit_price": 49
+   }
+  ]
+ },
+ {
+  "id": "C-205",
+  "customer": "Say \"Hi\" Ltd",
+  "currency": "GBP",
+  "status": "open",
+  "issued_at": "2026-10-14T02:15:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU97",
+    "qty": 1,
+    "unit_price": 100
+   },
+   {
+    "sku": "SKU23",
+    "qty": 1,
+    "unit_price": 9.99
+   },
+   {
+    "sku": "SKU79",
+    "qty": 5,
+    "unit_price": 12.5
+   }
+  ]
+ },
+ {
+  "id": "D-201",
+  "customer": "Blue Fox",
+  "currency": "GBP",
+  "status": "paid",
+  "issued_at": "2026-10-22T03:45:00+00:00",
+  "lines": [
+   {
+    "sku": "X",
+    "qty": 1,
+    "unit_price": 1
+   }
+  ]
+ },
+ {
+  "id": "N-2313",
+  "customer": "Acme BV",
+  "currency": "EUR",
+  "status": "paid",
+  "issued_at": "2026-10-13T18:45:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU32",
+    "qty": 2,
+    "unit_price": 9.99
+   },
+   {
+    "sku": "SKU44",
+    "qty": 5,
+    "unit_price": 49
+   }
+  ]
+ },
+ {
+  "id": "C-201",
+  "currency": "USD",
+  "status": "paid",
+  "issued_at": "2026-10-27T02:15:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU21",
+    "qty": 3,
+    "unit_price": 100
+   }
+  ]
+ },
+ {
+  "id": "N-2302",
+  "customer": "Acme BV",
+  "currency": "USD",
+  "status": "open",
+  "issued_at": "2026-10-14T02:00:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU76",
+    "qty": 3,
+    "unit_price": 12.5
+   }
+  ]
+ },
+ {
+  "id": "R-204",
+  "customer": "Kettle & Co",
+  "currency": "GBP",
+  "status": "paid",
+  "issued_at": "2026-10-09T03:45:00+00:00",
+  "lines": [
+   {
+    "sku": "X",
+    "qty": 1,
+    "unit_price": "0.125"
+   }
+  ]
+ },
+ {
+  "id": "N-2329",
+  "customer": "Kettle & Co",
+  "currency": "GBP",
+  "status": "open",
+  "issued_at": "2026-10-26T06:00:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU9",
+    "qty": 5,
+    "unit_price": 49
+   },
+   {
+    "sku": "SKU60",
+    "qty": 5,
+    "unit_price": 9.99
+   },
+   {
+    "sku": "SKU9",
+    "qty": 4,
+    "unit_price": 3.35
+   }
+  ]
+ },
+ {
+  "id": "R-205",
+  "customer": "Acme BV",
+  "currency": "EUR",
+  "status": "paid",
+  "issued_at": "2026-10-11T01:45:00+00:00",
+  "lines": [
+   {
+    "sku": "X",
+    "qty": 7,
+    "unit_price": "1234.5"
+   }
+  ]
+ },
+ {
+  "id": "C-204",
+  "customer": "Zoë Müller, GmbH",
+  "currency": "USD",
+  "status": "open",
+  "issued_at": "2026-10-24T06:45:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU52",
+    "qty": 3,
+    "unit_price": 12.5
+   },
+   {
+    "sku": "SKU2",
+    "qty": 3,
+    "unit_price": 100
+   }
+  ]
+ },
+ {
+  "id": "N-2300",
+  "customer": "Blue Fox",
+  "currency": "EUR",
+  "status": "paid",
+  "issued_at": "2026-10-21T10:15:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU68",
+    "qty": 3,
+    "unit_price": 12.5
+   },
+   {
+    "sku": "SKU93",
+    "qty": 2,
+    "unit_price": 100
+   }
+  ]
+ },
+ {
+  "id": "T-202",
+  "customer": "Kettle & Co",
+  "currency": "EUR",
+  "status": "open",
+  "issued_at": "2026-11-01T00:30:00+02:00",
+  "lines": [
+   {
+    "sku": "SKU79",
+    "qty": 1,
+    "unit_price": 12.5
+   },
+   {
+    "sku": "SKU27",
+    "qty": 3,
+    "unit_price": 9.99
+   },
+   {
+    "sku": "SKU19",
+    "qty": 2,
+    "unit_price": 12.5
+   }
+  ]
+ },
+ {
+  "id": "R-201",
+  "customer": "Northwind Ltd",
+  "currency": "EUR",
+  "status": "open",
+  "issued_at": "2026-10-06T20:00:00+00:00",
+  "lines": [
+   {
+    "sku": "X",
+    "qty": 1,
+    "unit_price": "10.50"
+   }
+  ]
+ },
+ {
+  "id": "N-2305",
+  "customer": "Northwind Ltd",
+  "currency": "USD",
+  "status": "paid",
+  "issued_at": "2026-10-05T04:15:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU73",
+    "qty": 3,
+    "unit_price": 49
+   }
+  ]
+ },
+ {
+  "id": "N-2301",
+  "customer": "Kettle & Co",
+  "currency": "EUR",
+  "status": "paid",
+  "issued_at": "2026-10-22T15:00:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU11",
+    "qty": 4,
+    "unit_price": 3.35
+   }
+  ]
+ },
+ {
+  "id": "N-2316",
+  "customer": "Northwind Ltd",
+  "currency": "USD",
+  "status": "open",
+  "issued_at": "2026-10-11T03:00:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU64",
+    "qty": 4,
+    "unit_price": 9.99
+   }
+  ]
+ },
+ {
+  "id": "N-2326",
+  "customer": "Blue Fox",
+  "currency": "USD",
+  "status": "open",
+  "issued_at": "2026-10-18T06:45:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU47",
+    "qty": 2,
+    "unit_price": 100
+   },
+   {
+    "sku": "SKU5",
+    "qty": 3,
+    "unit_price": 3.35
+   }
+  ]
+ },
+ {
+  "id": "N-2312",
+  "customer": "Acme BV",
+  "currency": "USD",
+  "status": "paid",
+  "issued_at": "2026-10-20T10:15:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU39",
+    "qty": 5,
+    "unit_price": 49
+   },
+   {
+    "sku": "SKU71",
+    "qty": 1,
+    "unit_price": 100
+   }
+  ]
+ },
+ {
+  "id": "N-2325",
+  "customer": "Kettle & Co",
+  "currency": "GBP",
+  "status": "paid",
+  "issued_at": "2026-10-18T13:15:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU27",
+    "qty": 5,
+    "unit_price": 12.5
+   },
+   {
+    "sku": "SKU27",
+    "qty": 3,
+    "unit_price": 3.35
+   },
+   {
+    "sku": "SKU55",
+    "qty": 1,
+    "unit_price": 9.99
+   }
+  ]
+ },
+ {
+  "id": "R-202",
+  "customer": "Kettle & Co",
+  "currency": "GBP",
+  "status": "open",
+  "issued_at": "2026-10-13T01:00:00+00:00",
+  "lines": [
+   {
+    "sku": "X",
+    "qty": 3,
+    "unit_price": "0.1"
+   },
+   {
+    "sku": "Y",
+    "qty": 1,
+    "unit_price": 0.2
+   }
+  ]
+ },
+ {
+  "id": "N-2319",
+  "customer": "Kettle & Co",
+  "currency": "EUR",
+  "status": "open",
+  "issued_at": "2026-10-21T15:00:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU34",
+    "qty": 1,
+    "unit_price": 12.5
+   }
+  ]
+ },
+ {
+  "id": "N-2314",
+  "customer": "Acme BV",
+  "currency": "EUR",
+  "status": "open",
+  "issued_at": "2026-10-17T09:00:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU49",
+    "qty": 1,
+    "unit_price": 12.5
+   },
+   {
+    "sku": "SKU96",
+    "qty": 4,
+    "unit_price": 12.5
+   }
+  ]
+ },
+ {
+  "id": "N-2323",
+  "customer": "Acme BV",
+  "currency": "GBP",
+  "status": "paid",
+  "issued_at": "2026-10-07T12:00:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU28",
+    "qty": 2,
+    "unit_price": 3.35
+   }
+  ]
+ },
+ {
+  "id": "T-201",
+  "customer": "Acme BV",
+  "currency": "USD",
+  "status": "paid",
+  "issued_at": "2026-10-31T23:30:00-02:00",
+  "lines": [
+   {
+    "sku": "SKU83",
+    "qty": 5,
+    "unit_price": 49
+   },
+   {
+    "sku": "SKU72",
+    "qty": 4,
+    "unit_price": 9.99
+   }
+  ]
+ },
+ {
+  "id": "N-2309",
+  "customer": "Northwind Ltd",
+  "currency": "EUR",
+  "status": "paid",
+  "issued_at": "2026-10-11T15:45:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU97",
+    "qty": 4,
+    "unit_price": 100
+   }
+  ]
+ },
+ {
+  "id": "R-203",
+  "customer": "Acme BV",
+  "currency": "EUR",
+  "status": "paid",
+  "issued_at": "2026-10-05T02:45:00+00:00",
+  "lines": [
+   {
+    "sku": "X",
+    "qty": "3",
+    "unit_price": "1.115"
+   }
+  ]
+ },
+ {
+  "id": "S-201",
+  "customer": "Northwind Ltd",
+  "currency": "EUR",
+  "status": "refunded",
+  "issued_at": "2026-10-24T20:00:00+00:00",
+  "lines": [
+   {
+    "sku": "X",
+    "qty": 1,
+    "unit_price": "40"
+   }
+  ]
+ },
+ {
+  "id": "N-2321",
+  "customer": "Kettle & Co",
+  "currency": "USD",
+  "status": "open",
+  "issued_at": "2026-10-12T03:45:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU84",
+    "qty": 5,
+    "unit_price": 12.5
+   },
+   {
+    "sku": "SKU6",
+    "qty": 1,
+    "unit_price": 12.5
+   },
+   {
+    "sku": "SKU3",
+    "qty": 2,
+    "unit_price": 49
+   }
+  ]
+ },
+ {
+  "id": "N-2328",
+  "customer": "Kettle & Co",
+  "currency": "EUR",
+  "status": "open",
+  "issued_at": "2026-10-23T13:15:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU95",
+    "qty": 1,
+    "unit_price": 3.35
+   }
+  ]
+ },
+ {
+  "id": "N-2306",
+  "customer": "Blue Fox",
+  "currency": "USD",
+  "status": "open",
+  "issued_at": "2026-10-06T12:15:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU40",
+    "qty": 4,
+    "unit_price": 49
+   },
+   {
+    "sku": "SKU28",
+    "qty": 3,
+    "unit_price": 12.5
+   },
+   {
+    "sku": "SKU14",
+    "qty": 5,
+    "unit_price": 9.99
+   }
+  ]
+ },
+ {
+  "id": "N-2310",
+  "customer": "Northwind Ltd",
+  "currency": "EUR",
+  "status": "paid",
+  "issued_at": "2026-10-20T17:45:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU89",
+    "qty": 5,
+    "unit_price": 49
+   }
+  ]
+ },
+ {
+  "id": "N-2322",
+  "customer": "Northwind Ltd",
+  "currency": "USD",
+  "status": "open",
+  "issued_at": "2026-10-18T10:45:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU6",
+    "qty": 5,
+    "unit_price": 49
+   }
+  ]
+ },
+ {
+  "id": "S-203",
+  "customer": "Northwind Ltd",
+  "currency": "USD",
+  "status": "refunded",
+  "issued_at": "2026-10-21T19:00:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU95",
+    "qty": 2,
+    "unit_price": 9.99
+   }
+  ]
+ },
+ {
+  "id": "N-2318",
+  "customer": "Kettle & Co",
+  "currency": "USD",
+  "status": "open",
+  "issued_at": "2026-10-27T18:15:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU36",
+    "qty": 1,
+    "unit_price": 3.35
+   },
+   {
+    "sku": "SKU28",
+    "qty": 3,
+    "unit_price": 12.5
+   },
+   {
+    "sku": "SKU65",
+    "qty": 3,
+    "unit_price": 9.99
+   }
+  ]
+ },
+ {
+  "id": "N-2327",
+  "customer": "Northwind Ltd",
+  "currency": "GBP",
+  "status": "open",
+  "issued_at": "2026-10-21T16:00:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU80",
+    "qty": 4,
+    "unit_price": 49
+   },
+   {
+    "sku": "SKU24",
+    "qty": 4,
+    "unit_price": 12.5
+   },
+   {
+    "sku": "SKU85",
+    "qty": 4,
+    "unit_price": 9.99
+   }
+  ]
+ },
+ {
+  "id": "S-202",
+  "customer": "Kettle & Co",
+  "currency": "GBP",
+  "status": "cancelled",
+  "issued_at": "2026-10-25T08:00:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU81",
+    "qty": 4,
+    "unit_price": 3.35
+   },
+   {
+    "sku": "SKU28",
+    "qty": 2,
+    "unit_price": 49
+   }
+  ]
+ },
+ {
+  "id": "N-2311",
+  "customer": "Northwind Ltd",
+  "currency": "GBP",
+  "status": "paid",
+  "issued_at": "2026-10-16T06:00:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU98",
+    "qty": 3,
+    "unit_price": 3.35
+   },
+   {
+    "sku": "SKU22",
+    "qty": 5,
+    "unit_price": 3.35
+   }
+  ]
+ },
+ {
+  "id": "C-203",
+  "customer": "   ",
+  "currency": "EUR",
+  "status": "paid",
+  "issued_at": "2026-10-03T02:15:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU19",
+    "qty": 1,
+    "unit_price": 100
+   },
+   {
+    "sku": "SKU51",
+    "qty": 2,
+    "unit_price": 3.35
+   },
+   {
+    "sku": "SKU39",
+    "qty": 2,
+    "unit_price": 49
+   }
+  ]
+ },
+ {
+  "id": "N-2308",
+  "customer": "Acme BV",
+  "currency": "EUR",
+  "status": "paid",
+  "issued_at": "2026-10-24T01:00:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU8",
+    "qty": 5,
+    "unit_price": 3.35
+   },
+   {
+    "sku": "SKU96",
+    "qty": 1,
+    "unit_price": 100
+   },
+   {
+    "sku": "SKU3",
+    "qty": 4,
+    "unit_price": 3.35
+   }
+  ]
+ },
+ {
+  "id": "N-2303",
+  "customer": "Northwind Ltd",
+  "currency": "USD",
+  "status": "open",
+  "issued_at": "2026-10-21T12:45:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU85",
+    "qty": 3,
+    "unit_price": 49
+   },
+   {
+    "sku": "SKU11",
+    "qty": 4,
+    "unit_price": 12.5
+   }
+  ]
+ },
+ {
+  "id": "N-2304",
+  "customer": "Kettle & Co",
+  "currency": "USD",
+  "status": "open",
+  "issued_at": "2026-10-24T21:00:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU23",
+    "qty": 5,
+    "unit_price": 100
+   }
+  ]
+ },
+ {
+  "id": "N-2307",
+  "customer": "Kettle & Co",
+  "currency": "EUR",
+  "status": "open",
+  "issued_at": "2026-10-20T05:45:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU13",
+    "qty": 4,
+    "unit_price": 12.5
+   },
+   {
+    "sku": "SKU58",
+    "qty": 1,
+    "unit_price": 9.99
+   },
+   {
+    "sku": "SKU81",
+    "qty": 4,
+    "unit_price": 3.35
+   }
+  ]
+ },
+ {
+  "id": "T-203",
+  "customer": "Acme BV",
+  "currency": "USD",
+  "status": "open",
+  "issued_at": "2026-10-15T23:59:00-05:00",
+  "lines": [
+   {
+    "sku": "SKU67",
+    "qty": 5,
+    "unit_price": 49
+   }
+  ]
+ },
+ {
+  "id": "N-2320",
+  "customer": "Kettle & Co",
+  "currency": "EUR",
+  "status": "open",
+  "issued_at": "2026-10-05T09:00:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU73",
+    "qty": 2,
+    "unit_price": 49
+   },
+   {
+    "sku": "SKU12",
+    "qty": 2,
+    "unit_price": 49
+   }
+  ]
+ },
+ {
+  "id": "N-2324",
+  "customer": "Blue Fox",
+  "currency": "USD",
+  "status": "paid",
+  "issued_at": "2026-10-20T19:15:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU47",
+    "qty": 5,
+    "unit_price": 12.5
+   },
+   {
+    "sku": "SKU96",
+    "qty": 5,
+    "unit_price": 100
+   },
+   {
+    "sku": "SKU59",
+    "qty": 2,
+    "unit_price": 100
+   }
+  ]
+ },
+ {
+  "id": "D-202",
+  "customer": "Blue Fox",
+  "currency": "USD",
+  "status": "paid",
+  "issued_at": "2026-10-13T12:45:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU76",
+    "qty": 4,
+    "unit_price": 9.99
+   }
+  ]
+ },
+ {
+  "id": "D-201",
+  "customer": "Northwind Ltd",
+  "currency": "EUR",
+  "status": "paid",
+  "issued_at": "2026-10-11T19:00:00+00:00",
+  "lines": [
+   {
+    "sku": "X",
+    "qty": 2,
+    "unit_price": "99.99"
+   }
+  ]
+ },
+ {
+  "id": "D-202",
+  "customer": "Acme BV",
+  "currency": "GBP",
+  "status": "cancelled",
+  "issued_at": "2026-10-18T17:15:00+00:00",
+  "lines": [
+   {
+    "sku": "SKU79",
+    "qty": 4,
+    "unit_price": 3.35
+   }
+  ]
+ }
+]

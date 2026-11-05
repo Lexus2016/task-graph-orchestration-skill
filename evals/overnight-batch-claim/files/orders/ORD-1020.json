@@ -1,0 +1,28 @@
+{
+ "order_id": "ORD-1020",
+ "email": "zoe@fr.fr",
+ "country": "germany ",
+ "created_at": "2026-11-02T05:08:01+01:00",
+ "items": [
+  {
+   "sku": "S925",
+   "qty": 2,
+   "price": 0.57
+  },
+  {
+   "sku": "S946",
+   "qty": 4,
+   "price": 12
+  },
+  {
+   "sku": "S458",
+   "qty": 2,
+   "price": 0.57
+  },
+  {
+   "sku": "S661",
+   "qty": 2,
+   "price": 0.29
+  }
+ ]
+}

@@ -1,0 +1,15 @@
+{
+ "order_id": "ORD-1011",
+ "email": "jan@mail.de",
+ "country": "BE",
+ "total_cents": 1740,
+ "items": [
+  {
+   "sku": "S567",
+   "qty": 4,
+   "unit_cents": 435
+  }
+ ],
+ "created_utc": "2026-11-02T17:24:32Z",
+ "source_sha256": "313f03159851b3d3cb3557c3774c5b756ef7244a8690157cf780f8984ad20430"
+}
