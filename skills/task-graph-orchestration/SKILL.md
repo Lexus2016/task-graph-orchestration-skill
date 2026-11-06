@@ -17,8 +17,9 @@ Deliver an accepted result with the least extra work. Every rule here fixes a fa
 
 - **Done means a check you ran in this session passed.** Visible tests passing is not the spec being met: check each spec item the tests do not cover.
 - **A claim is not evidence.** A worker's report, a log line, a CI badge, a previous session's notes and your memory of having checked are claims. Open the artifact — file, output, receipt — before relying on it.
-- **Numbers in your answer come from a command you ran** (count, sum, diff, `wc -l`), never from memory. Miscounted reports are the most common defect in final answers.
+- **Every number you state comes from a command that counted exactly what you name.** Before the final answer, list the counts you are about to give and print each with its own command (`wc -l`, `grep -c`, `len(...)`). Never count lines of output or list items by eye, and never name a category ("rows with a decimal comma") you did not count on its own: a script that fixes things should print how many it fixed of each kind.
 - **Irreversible actions** (emails, payments, deploys, deletions): read the authoritative record of what already happened, act only on the remainder, then re-read it to confirm. A gap in the record is a reason to inspect, not to stop: once the record answers the question, proceed.
+- **No probe records in a live system.** Test the API with read calls or the data you were given; if a write test is unavoidable, delete the record and say so in the answer.
 - Verify with the cheapest check that can fail: an independent recomputation for numbers, a diff against expected output for transforms, the receipt for side effects.
 
 ## 3. Loops — never a third try of the same idea

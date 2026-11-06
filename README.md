@@ -8,11 +8,11 @@
 
 <p align="center">
   <a href="LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-blue"></a>
-  <img alt="version" src="https://img.shields.io/badge/version-1.2.0-informational">
+  <img alt="version" src="https://img.shields.io/badge/version-1.3.0-informational">
   <img alt="Claude Code" src="https://img.shields.io/badge/Claude%20Code-skill%20%2B%20plugin-d97757">
   <img alt="Codex" src="https://img.shields.io/badge/Codex-skill-111111">
   <img alt="OpenCode" src="https://img.shields.io/badge/OpenCode-skill-4b5563">
-  <a href="#benchmark"><img alt="benchmark" src="https://img.shields.io/badge/discipline%20tasks-%2B6..13%20pp%20quality-brightgreen"></a>
+  <a href="#benchmark"><img alt="benchmark" src="https://img.shields.io/badge/final%20report%20accuracy-20%2F20%20vs%205%2F20-brightgreen"></a>
 </p>
 
 <p align="center">
@@ -21,11 +21,12 @@
 
 ---
 
-On tasks where agents cut corners — repeated failures, reports built on subagent claims — it raises blind-judged quality by **+6 to +13 percentage points** on Haiku, Sonnet, Opus and DeepSeek, for **×1.3–1.5** the cost. [Benchmark ↓](#benchmark)
+On a bulk import that silently loses rows, agents without the skill gave wrong counts in their final report in 15 of 20 runs; with it, in 0 of 20 (Haiku 5.5, DeepSeek V4.1 Flash). It does not make agents stronger at tasks they already do right, and it costs ×1.3–1.6. [Benchmark ↓](#benchmark)
 
 One drop-in skill for **Claude Code, Codex and OpenCode** that changes how an agent runs anything bigger than a one-liner:
 
 - **Proof, not prose.** A worker saying “tests pass” is a claim. The skill makes the agent check the CI run, the file, the receipt.
+- **Numbers from a command, not by eye.** Every count in the final report is printed by a command that counts exactly that thing; counting lines of output by eye is how reports go wrong.
 - **No blind retries.** Two identical failures in a row trigger **SSoT**: stop, name the assumption every attempt shared, change the cause — or escalate.
 - **A second look before “done”.** Before the final report the agent re-reads its own result as a reviewer who didn’t write it.
 - **Finish early, skip what's done.** After every step the agent checks the whole plan: goal already met → stop; work already in place → mark it done instead of redoing it; plan wrong → replan only the broken part.
@@ -59,69 +60,24 @@ The installer copies `skills/task-graph-orchestration/` into every agent skills 
 
 ## Benchmark
 
-Measured on 2026-11-05 with skill v1.1.0: Claude Code 2.1.318 (`claude -p`) for Claude models, OpenCode 2.1.2 (`opencode run`) for DeepSeek V4.1 Flash. Every run starts in a fresh directory with clean settings: no user `CLAUDE.md` / `AGENTS.md`, no MCP servers, no other skills.
+Measured on 2026-11-05/06 with Claude Code 2.1.318 (Haiku 5.5) and OpenCode 2.1.2 (DeepSeek V4.1 Flash). Every run starts in a fresh directory with clean settings: no user `CLAUDE.md` / `AGENTS.md`, no MCP servers, no other skills.
 
-- **7 tasks in 3 groups.** *Discipline:* a fix that failed twice with the same error; a final report built on three subagent claims, one without evidence. *Real work:* research over five sources that disagree; a discount bug across several files with hidden tests; a migration a teammate half-finished, with a non-idempotent script. *Small:* checking four configs; renaming one function.
-- **3 arms.** *without* — no skill · *loaded* — skill installed and the prompt asks for it · *auto* — skill installed, the model decides.
-- **Scoring.** A blind judge (Sonnet 5.5) never sees the arm; skill mentions are redacted. It scores quality 1–10 (shown here as % of ideal) and grades every criterion. Hidden tests, untouched files, config values and SSoT arithmetic are checked by code.
-- **Runs per arm per task:** Haiku 5, DeepSeek 3, Sonnet 2, Opus 2 — 252 runs in total.
+**Method.** Each task runs against a small local mock service (or plain files) that records what the agent really did. Outcomes are checked **by code from that record**; a blind judge (Sonnet 5.5, arm hidden, skill mentions redacted) only checks that the agent's final report matches the record, with the ground-truth numbers supplied. Arms: *no skill* · *v1.2.0* · *v1.3.0* (the version in this repository), with the skill installed and the prompt asking for it.
 
-**Discipline tasks (repeated failure, report built on subagent claims)** — quality, % of ideal
+| Task | What is checked | No skill | v1.2.0 | **v1.3.0** |
+|---|---|---|---|---|
+| Bulk import that silently drops 13 of 40 rows (Haiku + DeepSeek, 10 runs each per arm) | the final report states the right counts | 5 / 20 | 14 / 20 | **20 / 20** |
+| Crash after 15 of 40 customer emails, a fresh session finishes the job (Haiku, 5 runs) | every criterion: no duplicate email, everyone notified, decisions right, honest report | 3 / 5 | 2 / 5 | **5 / 5** |
+| Human-verification wall that stops activation after 4 of 12 vendors (10 runs) | service state correct and report honest | 10 / 10 | 10 / 10 | 10 / 10 |
+| Payment sandbox with 429s, an expiring token and charges that time out after being processed (10 runs) | each invoice charged exactly once and report honest | 9 / 10 | 10 / 10 | 10 / 10 |
 
-| Model | Without skill | Skill loaded | Δ | Relative | Skill auto | Δ |
-|---|---|---|---|---|---|---|
-| Haiku 5.5 | 60% | 66% | **+6 pp** | +10% | 62% | +2 pp |
-| Sonnet 5.5 | 62% | 70% | **+8 pp** | +12% | 60% | -2 pp |
-| Opus 5.5 | 62% | 72% | **+10 pp** | +16% | 65% | +2 pp |
-| DeepSeek V4.1 Flash (OpenCode) | 62% | 75% | **+13 pp** | +22% | 65% | +3 pp |
+**What it costs**, versus no skill, averaged over the three mock-service tasks: Haiku — tokens ×1.25, bill ×1.30, time ×1.23; DeepSeek — tokens ×1.83, bill ×1.61, time ×1.38.
 
-**Real work (research with conflicting sources, multi-file bug fix, half-finished migration)** — quality, % of ideal
+**What this says.** The measurable gain is in the *report*. Agents without the skill got a count wrong in 15 of 20 import runs (mostly the comma-decimal prices: 6, 8, 9, 11, 13 or 14 where the truth was 7) because they counted printed lines by eye. v1.3.0 asks for every number to be printed by a command that counts exactly that, and it was right in all 20. Where agents already behave — the service ended in a correct state in every run of every arm — the skill adds cost and nothing else.
 
-| Model | Without skill | Skill loaded | Δ | Relative | Skill auto | Δ |
-|---|---|---|---|---|---|---|
-| Haiku 5.5 | 89% | 89% | **+1 pp** | +1% | 90% | +1 pp |
-| Sonnet 5.5 | 87% | 90% | **+3 pp** | +4% | 82% | -5 pp |
-| Opus 5.5 | 88% | 85% | **-3 pp** | -4% | 85% | -3 pp |
-| DeepSeek V4.1 Flash (OpenCode) | 90% | 86% | **-4 pp** | -5% | 89% | -1 pp |
+**Correction.** Earlier versions of this README claimed "+6 to +13 percentage points" on discipline tasks. That figure came from a grader that checked whether the answer contained an SSoT line, which only the skill can produce. Graded on outcomes alone, those tasks were solved equally with and without the skill. The claim is withdrawn.
 
-**Small tasks (should stay small)** — quality, % of ideal
-
-| Model | Without skill | Skill loaded | Δ | Relative | Skill auto | Δ |
-|---|---|---|---|---|---|---|
-| Haiku 5.5 | 89% | 87% | **-2 pp** | -2% | 90% | +1 pp |
-| Sonnet 5.5 | 90% | 88% | **-2 pp** | -3% | 85% | -5 pp |
-| Opus 5.5 | 90% | 82% | **-8 pp** | -8% | 90% | +0 pp |
-| DeepSeek V4.1 Flash (OpenCode) | 90% | 87% | **-3 pp** | -4% | 88% | -2 pp |
-
-**Cost of using the skill** — all non-small tasks, *without → loaded*
-
-| Model | Time | Tool calls | Tokens | of them cache reads | Uncached input + output | Cost |
-|---|---|---|---|---|---|---|
-| Haiku 5.5 | ×2.8 | 3.6 → 6.2 | ×1.9 | 88% → 91% | ×1.4 | ×1.5 ($0.0030 → $0.0047) |
-| Sonnet 5.5 | ×1.0 | 1.8 → 4.7 | ×1.8 | 87% → 91% | ×1.2 | ×1.3 ($0.0379 → $0.0497) |
-| Opus 5.5 | ×1.4 | 1.5 → 2.7 | ×1.8 | 86% → 90% | ×1.2 | ×1.3 ($0.0768 → $0.0997) |
-| DeepSeek V4.1 Flash (OpenCode) | ×1.6 | 7.1 → 7.5 | ×1.7 | 73% → 72% | ×1.7 | ×1.5 ($0.0022 → $0.0033) |
-
-**How often the model picks the skill up by itself** (auto arm)
-
-| Model | Discipline | Real work | Small tasks |
-|---|---|---|---|
-| Haiku 5.5 | 0% | 0% | 0% |
-| Sonnet 5.5 | 50% | 0% | 0% |
-| Opus 5.5 | 75% | 0% | 0% |
-| DeepSeek V4.1 Flash (OpenCode) | 100% | 0% | 0% |
-
-**What the numbers say**
-
-- **Where it is built for, it works on every model.** Discipline tasks gain **+6 to +13 pp** (+10% to +22% relative) with the skill loaded. The cheapest model gains most: DeepSeek V4.1 Flash goes 62% → 75%.
-- **Real work: no measurable effect.** All four models solve the three real tasks without the skill — 100% of criteria in every arm — so there is nothing to win on correctness; quality moves within ±5 pp. These tasks turned out too easy to separate the arms; harder ones are the next step.
-- **Small tasks are the cost of forcing it.** Loaded on purpose, the skill costs 2–8 pp of polish on trivial tasks. In the *auto* arm it never triggers there (0%), so in normal use small tasks are untouched.
-- **Tokens grow ×1.7–1.9, the bill ×1.3–1.5.** The extra steps re-read context that is already cached: on Claude the cache-read share rises from 86–88% to 90–91%, and cache reads bill at a fraction of fresh input. Fresh tokens (uncached input + output) grow only ×1.2–1.4 on Claude; DeepSeek caches less and pays ×1.5.
-- **Auto-trigger is the weak spot.** Without being asked, DeepSeek used the skill on 100% of discipline runs, Opus on 75%, Sonnet on 50%, Haiku on 0%.
-
-**How the benchmark changed the skill.** The first v1.1.0 run lost up to 19 pp on real work. The transcripts showed why: agents ran the auto-update script mid-task and pasted SSoT lines and notes about the skill into their answers. Both moved out of the agent's path — updates now run outside tasks, and the deliverable is about the work only. One grader was also fixed: it penalised *adding* tests, which the prompt never forbade (editing or deleting existing tests still fails it).
-
-*Caveats:* small samples (2–5 runs per arm per task); the judge shares a model family with three of the four subjects; real-work tasks hit the ceiling.
+*Caveats:* 5–10 runs per cell and two models (Haiku 5.5, DeepSeek V4.1 Flash); the judge shares a model family with one of them. The v1.3.0 counting rule was written after the import task exposed the problem, so that row is not independent evidence; the refund task was chosen independently and points the same way, but 5 runs are not significant on their own (p = 0.44 against no skill). Two failures of the plain agent seen in a 3-run pilot — a duplicated charge and a stray test record in a live service — did not recur in the 150+ runs that followed. The test cases, mock services and judge are not published in this repository.
 
 ## Graph replay
 
@@ -205,7 +161,7 @@ install.sh · PROMPT.md             one-line install · paste-into-agent install
 
 ## About the benchmark
 
-The test cases, runners and the blind judge are kept outside this repository; it ships only the skill and these READMEs. The **Benchmark** section above describes the method (tasks, arms, scoring, runs) and will be updated as the measurements are redone.
+The test cases, mock services and the blind judge are kept outside this repository; it ships only the skill and these READMEs. The **Benchmark** section above describes the method, the results, the cost and the limits.
 
 ---
 
