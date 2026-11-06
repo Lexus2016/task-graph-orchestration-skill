@@ -25,14 +25,14 @@ On a bulk import that silently loses rows, agents without the skill gave wrong c
 
 One drop-in skill for **Claude Code, Codex and OpenCode** that changes how an agent runs anything bigger than a one-liner:
 
-- **Proof, not prose.** A worker saying “tests pass” is a claim. The skill makes the agent check the CI run, the file, the receipt.
+- **Proof, not prose.** A worker saying “tests pass” is a claim. The skill makes the agent open the CI run, the file, the receipt — and label what it could not check as unverified instead of hunting for it elsewhere.
 - **Numbers from a command, not by eye.** Every count in the final report is printed by a command that counts exactly that thing; counting lines of output by eye is how reports go wrong.
+- **Look at what people will see.** Before “done”, open the result the way a person will — each language, role and state that changed — or check what it renders from. Otherwise the headline says “done except X”.
+- **Read the live system before touching it.** Before an email, payment, deploy or deletion: read the record of what already happened, do only the remainder, re-read. Change a running system only through the path it actually runs on, and never leave test records in it.
 - **No blind retries.** Two identical failures in a row trigger **SSoT**: stop, name the assumption every attempt shared, change the cause — or escalate.
-- **A second look before “done”.** Before the final report the agent re-reads its own result as a reviewer who didn’t write it.
-- **Finish early, skip what's done.** After every step the agent checks the whole plan: goal already met → stop; work already in place → mark it done instead of redoing it; plan wrong → replan only the broken part.
-- **Delegate only when it pays.** Narrow first (headings, keywords, a short script), then read; hand work to subagents only when the reading they absorb outweighs their startup cost — with a minimal brief (paths, not contents) and a bounded answer.
-- **See the run, not just the result.** Long runs end with a link to an animated replay of the task graph — every plan, replan, skip, checkpoint and SSoT — plus automatic checks of how the agent followed the method.
-- **Small stays small.** A rename stays a rename: no plans, no ceremony. Orchestration switches on only when the work needs it.
+- **A second look at the moments that matter.** SSoT also fires before committing to a root cause or approach, before the first command that changes something outside the working directory, and before the final answer.
+- **Delegate only when it pays.** Subagents only for independent units with heavy reading or long runtimes; a minimal brief (paths, not contents) and a return of about 15 lines. Their answer is a claim too.
+- **Small stays small.** A rename stays a rename: no plans, no ceremony.
 
 ## Install
 
@@ -62,7 +62,7 @@ The installer copies `skills/task-graph-orchestration/` into every agent skills 
 
 Measured on 2026-11-05/06 with Claude Code 2.1.318 (Haiku 5.5) and OpenCode 2.1.2 (DeepSeek V4.1 Flash). Every run starts in a fresh directory with clean settings: no user `CLAUDE.md` / `AGENTS.md`, no MCP servers, no other skills.
 
-**Method.** Each task runs against a small local mock service (or plain files) that records what the agent really did. Outcomes are checked **by code from that record**; a blind judge (Sonnet 5.5, arm hidden, skill mentions redacted) only checks that the agent's final report matches the record, with the ground-truth numbers supplied. Arms: *no skill* · *v1.2.0* · *v1.3.0* (the version in this repository), with the skill installed and the prompt asking for it.
+**Method.** Each task runs against a small local mock service (or plain files) that records what the agent really did. Outcomes are checked **by code from that record**; a blind judge (Sonnet 5.5, arm hidden, skill mentions redacted) only checks that the agent's final report matches the record, with the ground-truth numbers supplied. Arms: *no skill* · *v1.2.0* · *v1.3.0*, with the skill installed and the prompt asking for it. v1.4.0, the current version, was checked against v1.3.0 separately (below).
 
 | Task | What is checked | No skill | v1.2.0 | **v1.3.0** |
 |---|---|---|---|---|
@@ -79,59 +79,58 @@ Measured on 2026-11-05/06 with Claude Code 2.1.318 (Haiku 5.5) and OpenCode 2.1.
 
 *Caveats:* 5–10 runs per cell and two models (Haiku 5.5, DeepSeek V4.1 Flash); the judge shares a model family with one of them. The v1.3.0 counting rule was written after the import task exposed the problem, so that row is not independent evidence; the refund task was chosen independently and points the same way, but 5 runs are not significant on their own (p = 0.44 against no skill). Two failures of the plain agent seen in a 3-run pilot — a duplicated charge and a stray test record in a live service — did not recur in the 150+ runs that followed. The test cases, mock services and judge are not published in this repository.
 
-**v1.4.0.** Four rules come from a real deploy session in which an agent reviewed a teammate's branch, called it clean and released it, and every language except English then showed message ids instead of text: open what a person will see (each language, role and state that changed) or check what it renders from before saying done; read how a running system is actually run before changing it; give a request that arrives mid-work its own criteria; pause (SSoT) before the first command that changes something outside the working directory. Small tasks did not reproduce that failure (without the skill, 20 of 20 runs translated every language), so these rules are checked only for harm: against v1.3.0 on four tasks, 40 runs per version on Haiku 5.5 and DeepSeek V4.1 Flash, clean results 40/40 vs 39/40, cost +8–9 %, time +5–11 %. In those 80 runs, which loaded the skill on request, an SSoT line appeared only twice.
+**v1.4.0 (current).** Four rules come from a real deploy session in which an agent reviewed a teammate's branch, called it clean and released it — after which every language except English showed message ids instead of text: open what a person will see; read how a running system is actually run before changing it; give a request that arrives mid-work its own criteria; pause (SSoT) before the first command that changes something outside the working directory. Small tasks did not reproduce that failure — without the skill, 20 of 20 runs translated every language — so these rules are checked **for harm only**, not for benefit:
 
-## Graph replay
-
-<p align="center"><img src="assets/graph-replay.png" alt="Animated replay of a task graph: units, statuses, criteria with evidence, findings and the tool-call timeline" width="900"></p>
-
-When a run is long enough to plan as a graph (FULL mode, or when you ask), the agent records every change to that graph and finishes with a link like `file:///…/.orchestration/vendor-compliance.graph.html`. The page is a single self-contained file:
-
-- **Play, pause, step, drag** through the run; **jump to any graph version** (v1 = first plan, v2… = each replan) or share `#step=N`.
-- **Criteria light up** as evidence arrives; delegated units show their worker; removed and skipped units stay visible as dashed boxes.
-- **Findings** — automatic checks of the method: DONE only after evidence, a checkpoint after every unit result, skips with a reason, a final SSoT, “complete” only when every required criterion has evidence, briefs and returns kept small.
-- With the run transcript (`trace_graph.py analyze --run …`) it also ties every event to the real tool call and splits tokens between the orchestrator and its subagents.
+| v1.4.0 vs v1.3.0 (four tasks, Haiku 5.5 + DeepSeek V4.1 Flash, 40 runs per version) | v1.3.0 | v1.4.0 |
+|---|---|---|
+| Clean result (state correct and report honest) | 39 / 40 | 40 / 40 |
+| Cost | — | +8–9 % |
+| Time | — | +5–11 % |
 
 ## What the skill makes the agent do
 
 | Situation | Behaviour the skill asks for |
 |---|---|
-| Subagent reports “all tests pass” with no CI link | Check the evidence; report the unverified part as unverified |
+| Subagent reports “all tests pass” with no CI link | Open the evidence; report what could not be checked as unverified |
+| A report is about to state counts | Print each count with its own command before writing it down |
+| Tests are green, but the change has a UI in several languages | Open each changed language and state, or check the catalogs; otherwise “done except X” |
 | Same error twice | Run SSoT, name the shared wrong assumption, test a new cause or escalate |
-| Batch of 40 items, 3 fail | 37 DONE with evidence, 3 FAILED with cause, nothing hidden |
-| A teammate already did half the work | Inspect the target before writing; mark finished units done; do only the rest |
-| Goal reached before the plan ran out | Stop, skip the remaining units as `superseded`, report |
-| Session dies mid-run | Resume from the state file; never repeat an external write |
+| A crashed batch of emails or payments | Read what was already sent or charged, do only the rest, re-read |
+| About to deploy or change a running service | Read how it is actually run now; change it the same way; SSoT before the first command |
 | Tiny edit | Nothing extra — no plan, no ritual |
 
-The benchmark measures the first two rows directly; the others are covered by the skill's rules and the half-finished-migration task, where models already did well without it.
+The benchmark measures the counting row directly, and the crash row is the refund task. The UI and live-system rows come from a real deploy session and are checked only for harm; the loop row is a rule the benchmark could not separate from what agents already do.
 
 ## How it works
 
-| Piece | What it does |
+`SKILL.md` is 52 lines in six sections. Each rule answers a failure seen in agent runs.
+
+| Section | What it asks |
 |---|---|
-| **Modes** | `DIRECT` (just do it) · `LITE` (compact plan) · `FULL` (unit contracts + resumable state). The smallest mode that fits wins. |
-| **Completion contract** | Acceptance criteria marked `required` / `optional`, fixed before work starts. “Done” means every required criterion has evidence. |
-| **Units** | Each with input, output, check, dependencies, effect (`read-only` / `reversible` / `consequential`) and a budget. |
-| **Failure classes** | Transient, wrong artifact, faulty plan, permission denied, uncertain external write, still pending — each with its own recovery. |
-| **Permissions** | Risk, permission and confidence are separate questions. Past success never widens what the agent may do. |
-| **Checkpoint** | After every unit result: contract met → stop early; output already exists → `DONE` without running; unit no longer needed → `SKIPPED (superseded)`; plan wrong → replan the affected subgraph. Criteria, not units, are required. |
-| **Delegation** | Narrow before reading; delegate only units whose unavoidable reading dwarfs a worker's startup; brief = minimum sufficient context; return = conclusions, not raw material; cheap model for mechanical units. |
-| **SSoT** | A deliberate pause plus a structured re-look — on loops, before the final decision, and on request. |
-| **Graph trace** | In FULL mode (or on request) the agent appends graph events to `.orchestration/<goal>.trace.jsonl` and ends with a link to the rendered replay page. |
-| **State** | JSON state file with single writer, atomic writes, cleanup list, and a run history for recurring workflows. |
+| **1. Before acting** | A completion contract of 2–6 checkable criteria, each `required` or `optional`; a mid-work request gets its own. Plan only real dependencies; N similar items are one unit. Look only where the request points. |
+| **2. Evidence** | Done = a check run in this session passed. Claims (workers, logs, CI badges, old notes, memory) are not evidence. Numbers come from commands. Irreversible actions: read the record, act on the remainder, re-read. No probe records in live systems. |
+| **3. Loops** | A one-line failure ledger; the same error twice or a repeated cause triggers a loop SSoT. Never a third try of the same idea. |
+| **4. SSoT** | A deliberate pause plus a re-look from a forced angle (below). |
+| **5. Parallel work** | Delegate only when it pays; minimal brief, short return, one owner per mutable output. |
+| **6. Final answer** | A silent checklist, then an answer about the work: result, evidence, gaps. No plans, modes or SSoT lines unless asked. |
 
 ### SSoT in one minute
 
-The agent writes 10 characters, picks one by a digit-sum rule, and announces it:
+The agent writes 10 fresh letters and digits, picks one by a digit-sum rule, and the position sets the angle it must look from:
 
 ```text
-SSoT: Rb7xQ2mT4z (digit-sum 13, pos 3): x.
+SSoT: Rb7xQ2mT4z (digit-sum 13, pos 3): x.   angle = 3 mod 5 = reviewer
 Re-look: both attempts edited key names, assuming svc-017 uses the default loader.
 It uses a custom loader. New unit `loader-shim`; no third retry of the same cause.
 ```
 
-The characters only create the pause. The re-look does the work: list the attempts, name the assumption they share, then change course.
+Angles: 0 user · 1 spec · 2 edge case · 3 reviewer · 4 next agent. If the angle repeats the previous one in the same task, the agent takes the next. It fires on a loop, before a commitment the rest of the work depends on, before marking done a unit no check covers, before the first command of a batch that changes something outside the working directory, before the final answer, and when you write “SSoT”. Its lines stay out of the final answer unless you ask.
+
+The characters only create the pause; the re-look does the work. **Honest note:** in 80 benchmark runs that loaded the skill on request, an SSoT line appeared only twice — agents often skip it.
+
+## Long, resumable or recurring work
+
+When work must survive the session — overnight runs, multi-session batches, recurring jobs — the skill points to `scripts/tgo.py`, a small state machine on disk (plan, start, done with a check, failure ledger, final), and `references/full-mode.md` for checkpoints, resume and monitoring. An optional graph-trace viewer (`scripts/trace_graph.py`, `assets/trace-viewer.html`, `references/trace.md`) renders a recorded run as an animated graph; the core skill does not turn it on.
 
 ## Auto-update
 
@@ -155,7 +154,7 @@ The check compares `VERSION` with this repository, downloads the tagged release,
 ## Repository layout
 
 ```text
-skills/task-graph-orchestration/   the skill: SKILL.md, references/, scripts/ (update.sh, tgo.py, trace_graph.py), assets/trace-viewer.html, VERSION
+skills/task-graph-orchestration/   the skill: SKILL.md, references/, scripts/ (update.sh, tgo.py, trace_graph.py), assets/trace-viewer.html (optional), VERSION
 tests/                             unit tests for the helper scripts
 .claude-plugin/ · hooks/           Claude Code plugin + marketplace manifests · SessionStart update hook
 install.sh · PROMPT.md             one-line install · paste-into-agent install
