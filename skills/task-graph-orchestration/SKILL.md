@@ -9,16 +9,16 @@ Deliver an accepted result with the least extra work. Every rule here fixes a fa
 
 ## 1. Before acting
 
-- **Completion contract:** 2–6 checkable criteria taken from the request, each `required` or `optional`. It is your definition of done; keep assumptions apart and disclose them.
+- **Completion contract:** 2–6 checkable criteria taken from the request, each `required` or `optional`. It is your definition of done; keep assumptions apart and disclose them. A new request from the user mid-work gets its own 2–6 criteria, added before you continue and checked in the final answer.
 - **Plan only real dependencies.** A unit is a deliverable with a check, never a single tool call. N similar items are **one** unit whose check counts or diffs the outputs.
 - Look only in the working directory and the places the request names. If verifying a claim needs access you do not have, label it unverified in the answer — do not go looking elsewhere for it.
 
 ## 2. Evidence — where agents actually fail
 
-- **Done means a check you ran in this session passed.** Visible tests passing is not the spec being met: check each spec item the tests do not cover.
+- **Done means a check you ran in this session passed.** Visible tests passing is not the spec being met: check each spec item the tests do not cover. For anything a person will look at, open it the way they will (each language, role and state that changed) before saying done; if you cannot, check what it renders from (translation catalogs, templates, config) for the changed parts. If neither is done, the headline says "done except X", never plain "done".
 - **A claim is not evidence.** A worker's report, a log line, a CI badge, a previous session's notes and your memory of having checked are claims. Open the artifact — file, output, receipt — before relying on it.
 - **Every number you state comes from a command that counted exactly what you name.** Before the final answer, list the counts you are about to give and print each with its own command (`wc -l`, `grep -c`, `len(...)`). Never count lines of output or list items by eye, and never name a category ("rows with a decimal comma") you did not count on its own: a script that fixes things should print how many it fixed of each kind.
-- **Irreversible actions** (emails, payments, deploys, deletions): read the authoritative record of what already happened, act only on the remainder, then re-read it to confirm. A gap in the record is a reason to inspect, not to stop: once the record answers the question, proceed.
+- **Irreversible actions** (emails, payments, deploys, deletions): read the authoritative record of what already happened, act only on the remainder, then re-read it to confirm. A gap in the record is a reason to inspect, not to stop: once the record answers the question, proceed. For a running system, first read how it is actually run now (running config, container labels, the live vhost), not how the repo or docs say it is run, and change it only through that same path.
 - **No probe records in a live system.** Test the API with read calls or the data you were given; if a write test is unavoidable, delete the record and say so in the answer.
 - Verify with the cheapest check that can fail: an independent recomputation for numbers, a diff against expected output for transforms, the receipt for side effects.
 
@@ -37,7 +37,7 @@ A short deliberate pause that breaks the inertia of your first interpretation, t
 5. If this angle is the same as your previous SSoT in this task, take the next one (`(angle+1) mod 5`): a string composed from habit locks you into one angle.
 6. Answer the angle with a concrete fact (file, line, command output). If it exposes a problem, act on it before moving on. Never recompose the string to get a different angle or to dismiss what the angle found.
 
-**When:** a loop (section 3); a **commitment** — before you settle on a root cause, an interpretation of the spec or an approach the rest of the work depends on; **done** on a unit whose effect cannot be undone or that no automated check covers; the **final decision** — before the final answer on non-trivial work and before any irreversible action; and whenever the user writes "SSoT". Several triggers at once make one checkpoint, not several. Not on every step: a pause on everything is no pause. Standing user or project rules that add triggers take precedence. SSoT lines are working notes — keep them out of the final answer unless the user asked for them.
+**When:** a loop (section 3); a **commitment** — before you settle on a root cause, an interpretation of the spec or an approach the rest of the work depends on; **done** on a unit whose effect cannot be undone or that no automated check covers; the **final decision** — before the final answer on non-trivial work and before any irreversible action — concretely, before the first command in a batch that changes something outside the working directory (ssh/scp/rsync, docker/compose, git push or merge, a database write, a deploy script), once per batch; and whenever the user writes "SSoT". Several triggers at once make one checkpoint, not several. Not on every step: a pause on everything is no pause. Standing user or project rules that add triggers take precedence. SSoT lines are working notes — keep them out of the final answer unless the user asked for them.
 
 ## 5. Parallel work — only when it pays
 

@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-blue"></a>
-  <img alt="version" src="https://img.shields.io/badge/version-1.3.0-informational">
+  <img alt="version" src="https://img.shields.io/badge/version-1.4.0-informational">
   <img alt="Claude Code" src="https://img.shields.io/badge/Claude%20Code-skill%20%2B%20plugin-d97757">
   <img alt="Codex" src="https://img.shields.io/badge/Codex-skill-111111">
   <img alt="OpenCode" src="https://img.shields.io/badge/OpenCode-skill-4b5563">
@@ -78,6 +78,8 @@ Measured on 2026-11-05/06 with Claude Code 2.1.318 (Haiku 5.5) and OpenCode 2.1.
 **Correction.** Earlier versions of this README claimed "+6 to +13 percentage points" on discipline tasks. That figure came from a grader that checked whether the answer contained an SSoT line, which only the skill can produce. Graded on outcomes alone, those tasks were solved equally with and without the skill. The claim is withdrawn.
 
 *Caveats:* 5–10 runs per cell and two models (Haiku 5.5, DeepSeek V4.1 Flash); the judge shares a model family with one of them. The v1.3.0 counting rule was written after the import task exposed the problem, so that row is not independent evidence; the refund task was chosen independently and points the same way, but 5 runs are not significant on their own (p = 0.44 against no skill). Two failures of the plain agent seen in a 3-run pilot — a duplicated charge and a stray test record in a live service — did not recur in the 150+ runs that followed. The test cases, mock services and judge are not published in this repository.
+
+**v1.4.0.** Four rules come from a real deploy session in which an agent reviewed a teammate's branch, called it clean and released it, and every language except English then showed message ids instead of text: open what a person will see (each language, role and state that changed) or check what it renders from before saying done; read how a running system is actually run before changing it; give a request that arrives mid-work its own criteria; pause (SSoT) before the first command that changes something outside the working directory. Small tasks did not reproduce that failure (without the skill, 20 of 20 runs translated every language), so these rules are checked only for harm: against v1.3.0 on four tasks, 40 runs per version on Haiku 5.5 and DeepSeek V4.1 Flash, clean results 40/40 vs 39/40, cost +8–9 %, time +5–11 %. In those 80 runs, which loaded the skill on request, an SSoT line appeared only twice.
 
 ## Graph replay
 
